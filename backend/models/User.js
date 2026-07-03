@@ -51,7 +51,7 @@ const userSchema = new mongoose.Schema(
       workMode: {
         type: String,
         enum: ["Remote", "Hybrid", "Onsite"],
-        default: "Remote",
+        default: "Onsite",
       },
 
       minimumCTC: {

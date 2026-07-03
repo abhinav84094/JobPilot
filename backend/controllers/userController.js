@@ -1,74 +1,89 @@
 import fs from "fs";
 import { createRequire } from "module";
 import Resume from "../models/Resume.js";
+import { analyzeResume } from "../services/geminiService.js";
 
 const require = createRequire(import.meta.url);
 const pdf = require("pdf-parse/lib/pdf-parse");
 
 export const uploadResume = async (req, res) => {
     try {
+
+        if (!req.file) {
+            return res.status(400).json({
+                success: false,
+                message: "Please upload a resume."
+            });
+        }
+
+        // Read uploaded PDF
         const buffer = fs.readFileSync(req.file.path);
 
+        // Extract text from PDF
         const data = await pdf(buffer);
 
-        const skills = await extractSkills(data.text);
+        // Analyze resume using Gemini
+        const analysis = await analyzeResume(data.text);
 
+        console.log(JSON.stringify(analysis, null, 2));
+
+        // Save or update resume
         const resume = await Resume.findOneAndUpdate(
-            { user: req.user._id },
+            {
+                user: req.user._id,
+            },
             {
                 user: req.user._id,
                 fileName: req.file.originalname,
                 rawText: data.text,
-                skills,
+
+                skills: analysis.skills || [],
+                education: analysis.education || [],
+                experience: analysis.experience || [],
+                projects: analysis.projects || [],
+                strengths: analysis.strengths || [],
+                missingSkills: analysis.missingSkills || [],
+                preferredRoles: analysis.preferredRoles || [],
+                atsScore: analysis.atsScore || 0,
+                suggestions: analysis.suggestions || [],
+
                 uploadedAt: new Date(),
             },
             {
                 upsert: true,
-                new: true,
+                returnDocument: "after",
             }
-            );
+        );
 
+        // Link resume to user
         req.user.resume = resume._id;
         await req.user.save();
 
-        fs.unlinkSync(req.file.path);
-
-
         res.status(200).json({
             success: true,
-            message: "Resume uploaded successfully",
+            message: "Resume analyzed successfully.",
             resume,
         });
-        
 
     } catch (err) {
+
         console.error(err);
-        res.status(500).json({ success: false, message: "Resume upload failed." });
+
+        return res.status(500).json({
+            success: false,
+            message: "Resume upload failed.",
+        });
+
+    } finally {
+
+        // Always delete uploaded file
+        if (req.file) {
+            fs.unlink(req.file.path, (err) => {
+                if (err) {
+                    console.error("Failed to delete uploaded file:", err);
+                }
+            });
+        }
+
     }
-};
-
-
-
-
-const extractSkills = (text) => {
-  const skillKeywords = [
-    // Languages
-    "JavaScript", "Java", "Python", "TypeScript", "C++", "C#", "Rust", "PHP", "Ruby",
-
-    // Frontend
-    "React", "Vue", "Angular", "HTML", "CSS", "Tailwind", "Bootstrap", "Next.js", "Redux",
-
-    // Backend
-    "Node.js", "Express", "MongoDB", "MySQL", "PostgreSQL", "Firebase", "Django", "FastAPI", "Spring Boot",
-
-    // Tools & DevOps
-    "Git", "Docker", "Postman", "Kubernetes", "AWS", "Azure", "GCP", "Linux", "Jenkins", "CI/CD",
-
-    // AI & Others
-    "REST API", "GraphQL", "Gemini API", "OpenAI", "Puppeteer", "Selenium", "Redis", "Prisma"
-  ];
-
-  return skillKeywords.filter(skill =>
-    text.toLowerCase().includes(skill.toLowerCase())
-  );
 };
