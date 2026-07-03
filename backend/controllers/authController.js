@@ -78,3 +78,32 @@ export const googleLogin = async (req, res) => {
 
     }
 };
+
+
+
+export const getCurrentUser = async (req, res) => {
+
+    res.status(200).json({
+        success: true,
+        user: req.user,
+    });
+
+};
+
+
+
+
+export const logout = (req, res) => {
+
+    res.clearCookie("token", {
+        httpOnly: true,
+        sameSite: "lax",
+        secure: false,
+    });
+
+    res.status(200).json({
+        success: true,
+        message: "Logged out successfully",
+    });
+
+};

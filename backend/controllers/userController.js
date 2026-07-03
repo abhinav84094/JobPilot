@@ -28,6 +28,12 @@ export const uploadResume = async (req, res) => {
             }
             );
 
+        req.user.resume = resume._id;
+        await req.user.save();
+
+        fs.unlinkSync(req.file.path);
+
+
         res.status(200).json({
             success: true,
             message: "Resume uploaded successfully",
@@ -37,7 +43,7 @@ export const uploadResume = async (req, res) => {
 
     } catch (err) {
         console.error(err);
-        res.status(500).json({ success: false, message: err.message });
+        res.status(500).json({ success: false, message: "Resume upload failed." });
     }
 };
 
