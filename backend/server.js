@@ -4,6 +4,7 @@ import DBconnection from "./db/mongodb.js";
 import userRoutes from "./routes/userRoutes.js"
 import cookieParser from "cookie-parser";
 import authRoutes from "./routes/authRoutes.js"
+import jobRoutes from "./routes/jobRoutes.js"
 import cors from "cors"
 
 
@@ -24,7 +25,8 @@ app.use(
 
 
 app.use("/api/user", userRoutes);
-app.use("/api/auth", authRoutes)
+app.use("/api/auth", authRoutes);
+app.use("/api/jobs", jobRoutes)
 
 app.get("/", (req, res)=>{
     res.send("this is home page")
