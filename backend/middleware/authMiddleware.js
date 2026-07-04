@@ -8,8 +8,6 @@ const authMiddleware = async (req, res, next) => {
 
         const token = req.cookies.token;
 
-        console.log("Token:", token);
-
         if (!token) {
             return res.status(401).json({
                 success: false,
@@ -18,8 +16,6 @@ const authMiddleware = async (req, res, next) => {
         }
 
         const decoded = jwt.verify(token, process.env.JWT_SECRET);
-
-        console.log("Decoded:", decoded);
 
         const user = await User.findById(decoded.id);
 

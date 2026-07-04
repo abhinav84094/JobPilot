@@ -1,34 +1,36 @@
 import { searchJobs } from "../services/jobService.js";
+import Resume from "../models/Resume.js";
+import { recommendJobs } from "../services/recommendationService.js";
 
 export const getJobs = async (req, res) => {
 
-    try {
+    const { query } = req.query;
 
-        const { query } = req.query;
+    const jobs = await searchJobs(query);
 
-        if (!query) {
-            return res.status(400).json({
-                success: false,
-                message: "Search query is required.",
-            });
-        }
+    const resume = await Resume.findOne({
+        user: req.user._id
+    });
 
-        const jobs = await searchJobs(query);
-
-        return res.status(200).json({
-            success: true,
-            jobs,
-        });
-
-    } catch (error) {
-
-        console.error(error);
-
-        return res.status(500).json({
+    if (!resume) {
+        return res.status(400).json({
             success: false,
-            message: "Failed to fetch jobs.",
+            message: "Please upload your resume first."
         });
-
     }
+
+    const recommendations =
+        recommendJobs(
+            resume,
+            jobs
+        );
+
+    res.json({
+
+        success: true,
+
+        jobs: recommendations
+
+    });
 
 };
