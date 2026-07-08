@@ -6,6 +6,8 @@ import cookieParser from "cookie-parser";
 import authRoutes from "./routes/authRoutes.js"
 import jobRoutes from "./routes/jobRoutes.js"
 import cors from "cors"
+import { startJobScraper } from "./cron/scrapeJobsCron.js";
+import { startCleanupCron } from "./cron/cleanupJobsCron.js";
 
 
 dotenv.config();
@@ -42,5 +44,7 @@ app.get("/", (req, res)=>{
 
 app.listen(process.env.PORT, async ()=>{
     await DBconnection();
+    startJobScraper();
+    startCleanupCron();
     console.log(`Server is started on PORT ${process.env.PORT}`)
 })

@@ -1,4 +1,5 @@
 import { SKILL_ALIASES } from "../utils/skillAliases.js";
+import Job from "../models/Job.js";
 
 /**
  * Normalize text
@@ -246,29 +247,68 @@ export const calculateExperienceEligibility = (
 /**
  * Recommend jobs
  */
-export const recommendJobs = (
-    resume,
-    jobs
-) => {
+/**
+ * Recommend Jobs From Database
+ */
+
+const MIN_SKILL_SCORE =  Number(process.env.MIN_SKILL_SCORE) || 50;
+
+export const recommendJobs = async (resume) => {
+
+    const jobs = await Job.find({
+
+        status: "active",
+
+        requiredSkills: {
+            $in: resume.skills,
+        },
+
+    })
+    .sort({
+        postedDate: -1,
+    })
+    .limit(300)
+    .lean();
 
     return jobs
 
         .map(job => {
 
-            const jobSkills =
-                extractSkills(job.description);
-
             const skillAnalysis =
                 calculateSkillScore(
+
                     resume.skills,
-                    jobSkills
+
+                    job.requiredSkills
+
                 );
 
-            const experienceEligibility =
-                calculateExperienceEligibility(
-                    resume.experience,
-                    job.description
+            const userMonths =
+                calculateTotalExperienceMonths(
+
+                    resume.experience
+
                 );
+
+            const experienceEligibility = {
+
+                requiredMonths:
+                    job.requiredExperienceMonths,
+
+                requiredYears:
+                    Math.floor(
+                        job.requiredExperienceMonths / 12
+                    ),
+
+                userMonths,
+
+                userExperience:
+                    `${Math.floor(userMonths / 12)} Years ${userMonths % 12} Months`,
+
+                eligible:
+                    userMonths >= job.requiredExperienceMonths,
+
+            };
 
             return {
 
@@ -276,9 +316,6 @@ export const recommendJobs = (
 
                 skillScore:
                     skillAnalysis.score,
-
-                requiredSkills:
-                    jobSkills,
 
                 matchedSkills:
                     skillAnalysis.matchedSkills,
@@ -289,24 +326,40 @@ export const recommendJobs = (
                 eligibility: {
 
                     experience:
-                        experienceEligibility
+                        experienceEligibility,
 
-                }
+                },
 
             };
 
         })
 
+        // Show only jobs with 50%+ skill match
+        .filter(job => job.skillScore >= MIN_SKILL_SCORE)
+
         .sort((a, b) => {
 
-            const aEligible = a.eligibility.experience.eligible;
-            const bEligible = b.eligibility.experience.eligible;
+            if (
+                a.eligibility.experience.eligible !==
+                b.eligibility.experience.eligible
+            ) {
 
-            if (aEligible !== bEligible) {
-                return Number(bEligible) - Number(aEligible);
+                return Number(
+                    b.eligibility.experience.eligible
+                ) - Number(
+                    a.eligibility.experience.eligible
+                );
+
             }
 
-            return b.skillScore - a.skillScore;
+            if (b.skillScore !== a.skillScore) {
+
+                return b.skillScore - a.skillScore;
+
+            }
+
+            return new Date(b.postedDate) - new Date(a.postedDate);
 
         });
+
 };

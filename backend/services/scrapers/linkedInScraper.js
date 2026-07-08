@@ -1,20 +1,27 @@
-import puppeteer from "puppeteer";
+import { getBrowser } from "../browser.js";
+import Job from "../../models/Job.js";
+
+import { parsePostedDate } from "../../utils/parsePostedDate.js";
+import { isFreshJob } from "../../utils/isFreshJob.js";
+
+import {
+    extractSkills,
+    calculateExperienceEligibility,
+} from "../recommendationService.js";
 
 /**
- * Clean LinkedIn job description
+ * Clean LinkedIn Description
  */
-const cleanDescription = (text) => {
+const cleanDescription = (text = "") => {
 
     let cleaned = text;
 
-    // Remove everything before About the job
     const aboutIndex = cleaned.indexOf("About the job");
 
     if (aboutIndex !== -1) {
         cleaned = cleaned.substring(aboutIndex);
     }
 
-    // Remove everything after Similar jobs
     const similarIndex = cleaned.indexOf("Similar jobs");
 
     if (similarIndex !== -1) {
@@ -25,23 +32,21 @@ const cleanDescription = (text) => {
 
 };
 
-
 /**
- * Scrape full description from job page
+ * Scrape Job Description
  */
 const getJobDescription = async (page, url) => {
 
     await page.goto(url, {
-        waitUntil: "networkidle2",
+        waitUntil: "domcontentloaded",
     });
 
-    // Close login popup if it appears
     try {
 
         await page.waitForSelector(
             'button[aria-label="Dismiss"]',
             {
-                timeout: 5000,
+                timeout: 3000,
             }
         );
 
@@ -49,44 +54,57 @@ const getJobDescription = async (page, url) => {
             'button[aria-label="Dismiss"]'
         );
 
-        console.log("Popup closed.");
+    }
+    catch {}
 
-    } catch {
+    try {
 
-        console.log("No popup found.");
+        await page.waitForSelector(
+            ".show-more-less-html__markup",
+            {
+                timeout: 5000,
+            }
+        );
+
+        const description =
+            await page.$eval(
+                ".show-more-less-html__markup",
+                el => el.innerText
+            );
+
+        return cleanDescription(description);
+
+    }
+    catch {
+
+        const body =
+            await page.evaluate(
+                () => document.body.innerText
+            );
+
+        return cleanDescription(body);
 
     }
 
-    // Wait for page to settle
-    await new Promise(resolve => setTimeout(resolve, 2000));
-
-    // Get all visible text
-    const bodyText = await page.evaluate(() => document.body.innerText);
-
-    return cleanDescription(bodyText);
-
 };
 
-
-
+/**
+ * Scrape LinkedIn Jobs
+ */
 export const scrapeLinkedInJobs = async (query) => {
 
-    const browser = await puppeteer.launch({
-
-        headless: false,
-
-        defaultViewport: null,
-
-    });
+    const browser = await getBrowser();
 
     const page = await browser.newPage();
 
     const url =
-        `https://www.linkedin.com/jobs-guest/jobs/api/seeMoreJobPostings/search?keywords=${encodeURIComponent(query)}&start=0`;
+        `https://www.linkedin.com/jobs-guest/jobs/api/seeMoreJobPostings/search?keywords=${encodeURIComponent(query)}&location=India&geoId=102713980&start=0`;
 
     await page.goto(url, {
-        waitUntil: "networkidle2",
+        waitUntil: "domcontentloaded",
     });
+
+    await page.waitForSelector(".base-search-card");
 
     const jobs = await page.evaluate(() => {
 
@@ -110,31 +128,230 @@ export const scrapeLinkedInJobs = async (query) => {
                     ?.innerText
                     ?.trim(),
 
-            url:
+            jobUrl:
                 card.querySelector("a.base-card__full-link")
                     ?.href,
+
+            postedText:
+                card.querySelector("time")
+                    ?.innerText
+                    ?.trim(),
 
         }));
 
     });
 
-    const detailsPage = await browser.newPage();
+    const validJobs = jobs.filter(job =>
+        job.title &&
+        job.company &&
+        job.jobUrl &&
+        job.postedText
+    );
 
-    // Fetch description for every job
-    for (const job of jobs) {
+    const operations = [];
 
-        console.log(`Scraping: ${job.title}`);
+    for (const job of validJobs) {
 
-        job.description = await getJobDescription(
-            detailsPage,
-            job.url
+        job.postedDate =
+            parsePostedDate(job.postedText);
+
+        if (!isFreshJob(job.postedDate)) {
+
+            console.log(
+                `Skipped ${job.title} (${job.postedText})`
+            );
+
+            continue;
+
+        }
+
+        console.log(
+            `Scraping ${job.title}`
         );
+
+        const detailPage =
+            await browser.newPage();
+
+        try {
+
+            job.description =
+                await getJobDescription(
+                    detailPage,
+                    job.jobUrl
+                );
+
+            // LinkedIn login page
+            if (
+                !job.description ||
+                job.description.includes("Join LinkedIn") ||
+                job.description.includes("Agree & Join") ||
+                job.description.includes("Sign in")
+            ) {
+
+                console.log(
+                    `Blocked: ${job.title}`
+                );
+
+                continue;
+
+            }
+
+            const experience =
+                calculateExperienceEligibility(
+                    [],
+                    job.description
+                );
+
+            job.requiredSkills =
+                extractSkills(
+                    job.description
+                );
+
+            if (
+                job.requiredSkills.length === 0
+            ) {
+
+                console.log(
+                    `No skills found : ${job.title}`
+                );
+
+            }
+
+            job.requiredExperienceMonths =
+                experience.requiredMonths;            operations.push({
+
+                updateOne: {
+
+                    filter: {
+
+                        platform: "linkedin",
+
+                        jobUrl: job.jobUrl,
+
+                    },
+
+                    update: {
+
+                        $set: {
+
+                            title: job.title,
+
+                            company: job.company,
+
+                            location: job.location,
+
+                            platform: "linkedin",
+
+                            jobUrl: job.jobUrl,
+
+                            // Uncomment if you want to save description
+                            // description: job.description,
+
+                            requiredSkills:
+                                job.requiredSkills,
+
+                            requiredExperienceMonths:
+                                job.requiredExperienceMonths,
+
+                            postedDate:
+                                job.postedDate,
+
+                            scrapedAt:
+                                new Date(),
+
+                            status: "active",
+
+                            expiredAt: null,
+
+                        },
+
+                    },
+
+                    upsert: true,
+
+                },
+
+            });
+
+        }
+        catch (err) {
+
+            console.log(
+                `Error scraping ${job.title}`
+            );
+
+            console.log(err.message);
+
+        }
+        finally {
+
+            await detailPage.close();
+
+        }
 
     }
 
-    await browser.close();
+    await page.close();
 
+    if (operations.length === 0) {
 
-    return jobs;
+        console.log(
+            `No new jobs found for ${query}`
+        );
+
+        return {
+
+            success: true,
+
+            query,
+
+            fetched: validJobs.length,
+
+            processed: 0,
+
+        };
+
+    }
+
+    const result =
+        await Job.bulkWrite(
+            operations
+        );
+
+    console.log("========================================");
+
+    console.log(
+        `Query      : ${query}`
+    );
+
+    console.log(
+        `Fetched    : ${validJobs.length}`
+    );
+
+    console.log(
+        `Processed  : ${operations.length}`
+    );
+
+    console.log(
+        `Inserted   : ${result.upsertedCount}`
+    );
+
+    console.log(
+        `Updated    : ${result.modifiedCount}`
+    );
+
+    console.log("========================================");
+
+    return {
+
+        success: true,
+
+        query,
+
+        fetched: validJobs.length,
+
+        processed: operations.length,
+
+    };
 
 };
