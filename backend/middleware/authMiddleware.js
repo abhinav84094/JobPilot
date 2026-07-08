@@ -4,7 +4,6 @@ import User from "../models/User.js";
 const authMiddleware = async (req, res, next) => {
     try {
 
-        console.log("Cookies:", req.cookies);
 
         const token = req.cookies.token;
 
@@ -18,8 +17,6 @@ const authMiddleware = async (req, res, next) => {
         const decoded = jwt.verify(token, process.env.JWT_SECRET);
 
         const user = await User.findById(decoded.id);
-
-        console.log("User:", user);
 
         if (!user) {
             return res.status(401).json({
