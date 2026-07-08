@@ -1,7 +1,6 @@
-import { createContext, useEffect, useState } from "react";
+import { createContext, useContext, useEffect, useState } from "react";
 
 const API_URL = import.meta.env.VITE_API_URL;
-
 export const AuthContext = createContext(null);
 
 export function AuthProvider({ children }) {
@@ -13,10 +12,9 @@ export function AuthProvider({ children }) {
       const res = await fetch(`${API_URL}/api/auth/me`, {
         credentials: "include",
       });
-
       if (res.ok) {
         const data = await res.json();
-        setUser(data);
+        setUser(data.success ? data.user : null);
       } else {
         setUser(null);
       }
@@ -40,21 +38,13 @@ export function AuthProvider({ children }) {
       method: "POST",
       credentials: "include",
     });
-
     setUser(null);
   }
 
   return (
-    <AuthContext.Provider
-      value={{
-        user,
-        loading,
-        loginWithGoogle,
-        logout,
-        refetch: fetchMe,
-      }}
-    >
+    <AuthContext.Provider value={{ user, loading, loginWithGoogle, logout, refetch: fetchMe }}>
       {children}
     </AuthContext.Provider>
   );
 }
+
