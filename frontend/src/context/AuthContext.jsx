@@ -29,9 +29,6 @@ export function AuthProvider({ children }) {
     fetchMe();
   }, []);
 
-  function loginWithGoogle() {
-    window.location.href = `${API_URL}/api/auth/google`;
-  }
 
   async function logout() {
     await fetch(`${API_URL}/api/auth/logout`, {
@@ -42,7 +39,7 @@ export function AuthProvider({ children }) {
   }
 
   return (
-    <AuthContext.Provider value={{ user, loading, loginWithGoogle, logout, refetch: fetchMe }}>
+    <AuthContext.Provider value={{ user, loading, logout, refetch: fetchMe }}>
       {children}
     </AuthContext.Provider>
   );

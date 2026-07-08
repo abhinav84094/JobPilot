@@ -21,6 +21,7 @@ const navItems = [
 export default function Sidebar() {
 
     const {user} = useAuth();
+    const {logout} = useAuth();
 
 
   return (
@@ -97,6 +98,8 @@ export default function Sidebar() {
       </p>
     </div>
   </div>
+
+  <button onClick={logout}>LogOut</button>
 </div>
     </aside>
   );

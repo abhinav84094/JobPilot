@@ -1,7 +1,7 @@
 import { Sparkles, ArrowRight, ShieldCheck, Lock, BadgeCheck, FileText, Target, TrendingUp, Send } from "lucide-react";
 import { useAuth } from "../hooks/useAuth";
 import { Navigate } from "react-router-dom";
-
+import { GoogleLogin } from "@react-oauth/google";
 
 const features = [
   { icon: FileText, tint: "bg-violet-50 text-violet-600", title: "AI resume analysis", desc: "Get in-depth insights from your resume" },
@@ -16,9 +16,12 @@ const trustBadges = [
   { icon: BadgeCheck, title: "No password required", desc: "One-click secure access" },
 ];
 
+
+const API_URL = import.meta.env.VITE_API_URL;
+
 export default function Login() {
 
-    const { loginWithGoogle, user, loading } = useAuth();
+    const {  user, loading } = useAuth();
 
     if (!loading && user) {
         return <Navigate to="/dashboard" replace />;
@@ -127,10 +130,32 @@ export default function Login() {
           <p className="text-sm text-neutral-500 mt-1" >Continue with your Google account</p>
         </div>
 
-        <button className="mt-8 w-full flex items-center justify-center gap-3 border border-neutral-200 hover:border-neutral-300 rounded-xl py-3.5 transition-colors">
-          <GoogleIcon />
-          <span className="text-sm font-medium text-neutral-900" onClick={loginWithGoogle}>Continue with Google</span>
-        </button>
+        <GoogleLogin
+            onSuccess={async (credentialResponse) => {
+
+                const res = await fetch(
+                    `${API_URL}/api/auth/google`,
+                    {
+                        method: "POST",
+                        headers: {
+                            "Content-Type": "application/json",
+                        },
+                        credentials: "include",
+                        body: JSON.stringify({
+                            token: credentialResponse.credential,
+                        }),
+                    }
+                );
+
+                if (res.ok) {
+                    window.location.href = "/dashboard";
+                }
+
+            }}
+            onError={() => {
+                console.log("Google Login Failed");
+            }}
+          />
 
         <div className="flex items-center gap-3 w-full mt-8">
           <div className="flex-1 h-px bg-neutral-100" />

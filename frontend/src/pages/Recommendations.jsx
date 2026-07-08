@@ -184,7 +184,7 @@ export default function Recommendations() {
       setLoading(true);
       setError(null);
       try {
-        const res = await fetch(`${API_URL}/api/jobs/search?query=${encodeURIComponent(activeRole)}`, {
+        const res = await fetch(`${API_URL}/api/jobs/recommendations`, {
           credentials: "include",
         });
         const data = await res.json();
