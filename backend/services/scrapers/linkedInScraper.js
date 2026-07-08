@@ -1,7 +1,3 @@
-<<<<<<< HEAD
-import { getBrowser } from "./browser.js";
-
-=======
 import { getBrowser } from "../browser.js";
 import Job from "../../models/Job.js";
 
@@ -12,7 +8,6 @@ import {
     extractSkills,
     calculateExperienceEligibility,
 } from "../recommendationService.js";
->>>>>>> main
 
 /**
  * Clean LinkedIn Description
@@ -102,16 +97,6 @@ export const scrapeLinkedInJobs = async (query) => {
 
     const page = await browser.newPage();
 
-<<<<<<< HEAD
-    try {
-
-        const url =
-            `https://www.linkedin.com/jobs-guest/jobs/api/seeMoreJobPostings/search?keywords=${encodeURIComponent(query)}&location=India&geoId=102713980&start=0`;
-
-        await page.goto(url, {
-            waitUntil: "domcontentloaded",
-        });
-=======
     const url =
         `https://www.linkedin.com/jobs-guest/jobs/api/seeMoreJobPostings/search?keywords=${encodeURIComponent(query)}&location=India&geoId=102713980&start=0`;
 
@@ -122,34 +107,27 @@ export const scrapeLinkedInJobs = async (query) => {
     await page.waitForSelector(".base-search-card");
 
     const jobs = await page.evaluate(() => {
->>>>>>> main
 
-        await page.waitForSelector(".base-search-card", {
-            timeout: 10000,
-        });
+        const cards =
+            document.querySelectorAll(".base-search-card");
 
-        const jobs = await page.evaluate(() => {
+        return [...cards].map(card => ({
 
-            const cards = document.querySelectorAll(".base-search-card");
+            title:
+                card.querySelector(".base-search-card__title")
+                    ?.innerText
+                    ?.trim(),
 
-            return [...cards].map(card => ({
+            company:
+                card.querySelector(".base-search-card__subtitle")
+                    ?.innerText
+                    ?.trim(),
 
-                title:
-                    card.querySelector(".base-search-card__title")
-                        ?.innerText
-                        ?.trim(),
+            location:
+                card.querySelector(".job-search-card__location")
+                    ?.innerText
+                    ?.trim(),
 
-<<<<<<< HEAD
-                company:
-                    card.querySelector(".base-search-card__subtitle")
-                        ?.innerText
-                        ?.trim(),
-
-                location:
-                    card.querySelector(".job-search-card__location")
-                        ?.innerText
-                        ?.trim(),
-=======
             jobUrl:
                 card.querySelector("a.base-card__full-link")
                     ?.href,
@@ -160,60 +138,9 @@ export const scrapeLinkedInJobs = async (query) => {
                     ?.trim(),
 
         }));
->>>>>>> main
 
-                url:
-                    card.querySelector("a.base-card__full-link")
-                        ?.href,
+    });
 
-<<<<<<< HEAD
-            }));
-
-        });
-
-        // Fetch description for every job
-        await Promise.all(
-
-            jobs.map(async (job) => {
-
-                if (!job.url) return;
-
-                const detailPage = await browser.newPage();
-
-                try {
-
-                    console.log(`Scraping: ${job.title}`);
-
-                    job.description = await getJobDescription(
-                        detailPage,
-                        job.url
-                    );
-
-                } catch (err) {
-
-                    console.log(err.message);
-
-                    job.description = "";
-
-                } finally {
-
-                    await detailPage.close();
-
-                }
-
-            })
-
-        );
-
-        return jobs;
-
-    } finally {
-
-        await page.close();
-
-    }
-
-=======
     const validJobs = jobs.filter(job =>
         job.title &&
         job.company &&
@@ -427,5 +354,4 @@ export const scrapeLinkedInJobs = async (query) => {
 
     };
 
->>>>>>> main
 };
