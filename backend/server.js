@@ -19,7 +19,7 @@ app.use(cookieParser());
 
 app.use(
     cors({
-        origin: "https://prakashjobpilot.netlify.app",
+        origin: process.env.CLIENT_URL,
         credentials: true,
     })
 );
