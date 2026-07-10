@@ -76,7 +76,7 @@ function JobCard({ job }) {
           <ChevronDown size={14} className={`transition-transform ${open ? "rotate-180" : ""}`} />
         </button>
         <a
-          href={job.url}
+          href={job.jobUrl}
           target="_blank"
           rel="noopener noreferrer"
           className="flex items-center gap-1.5 text-sm font-medium bg-violet-600 hover:bg-violet-700 text-white rounded-lg px-4 py-2 transition-colors"

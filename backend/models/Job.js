@@ -2,6 +2,11 @@ import mongoose from "mongoose";
 
 const jobSchema = new mongoose.Schema(
     {
+        jobKey: {
+            type: String,
+            required: true,
+            unique: true,
+        },
         title: {
             type: String,
             required: true,
@@ -103,5 +108,11 @@ jobSchema.index({
 jobSchema.index({
     status: 1,
 });
+jobSchema.index(
+    { platform: 1, jobKey: 1 },
+    { unique: true }
+);
+
+
 
 export default mongoose.model("Job", jobSchema);

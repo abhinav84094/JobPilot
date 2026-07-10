@@ -218,21 +218,23 @@ export const scrapeLinkedInJobs = async (query) => {
             }
 
             job.requiredExperienceMonths =
-                experience.requiredMonths;            operations.push({
+                experience.requiredMonths;    
+                const jobKey = 
+                `${job.company.trim().toLowerCase()}-${job.title.trim().toLowerCase()}-${job.location.trim().toLowerCase()}`;
+
+                operations.push({
 
                 updateOne: {
 
                     filter: {
-
                         platform: "linkedin",
-
-                        jobUrl: job.jobUrl,
-
+                        jobKey
                     },
 
                     update: {
 
                         $set: {
+                            jobKey,
 
                             title: job.title,
 
