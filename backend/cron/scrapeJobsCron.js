@@ -4,12 +4,13 @@ import { scrapeLinkedInJobs } from "../services/scrapers/linkedInScraper.js";
 import { closeBrowser } from "../services/browser.js";
 
 const JOB_ROLES = [
+    "C#", "Java", "Python", "MERN", "JavaScript", 
 
-    // "Backend Developer",
+    "Backend Developer",
 
-    // "Frontend Developer",
+    "Frontend Developer",
 
-    // "Full Stack Developer",
+    "Full Stack Developer",
 
     "React Developer",
 
@@ -17,11 +18,11 @@ const JOB_ROLES = [
 
     "MERN Developer",
 
-    // "Java Developer",
+    "Java Developer",
 
-    // "Python Developer",
+    "Python Developer",
 
-    // "Software Engineer",
+    "Software Engineer",
 
 ];
 
