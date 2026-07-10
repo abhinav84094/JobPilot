@@ -55,7 +55,7 @@ export const googleLogin = async (req, res) => {
         const jwtToken = generateToken(user);
 
         // Store in cookie
-        res.cookie("token", token, {
+        res.cookie("token", jwtToken, {
             httpOnly: true,
             secure: true,
             sameSite: "None",
