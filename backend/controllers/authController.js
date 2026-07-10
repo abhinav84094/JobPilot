@@ -55,12 +55,12 @@ export const googleLogin = async (req, res) => {
         const jwtToken = generateToken(user);
 
         // Store in cookie
-        res.cookie("token", jwtToken, {
+        res.cookie("token", token, {
             httpOnly: true,
-            secure: false,      // true after deployment
-            sameSite: "lax",
+            secure: true,
+            sameSite: "None",
             maxAge: 7 * 24 * 60 * 60 * 1000,
-        });
+            });
 
         res.status(200).json({
             success: true,
