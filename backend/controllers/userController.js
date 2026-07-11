@@ -6,6 +6,10 @@ import { analyzeResume } from "../services/geminiService.js";
 const require = createRequire(import.meta.url);
 const pdf = require("pdf-parse/lib/pdf-parse");
 
+
+
+
+
 export const uploadResume = async (req, res) => {
     try {
 
@@ -15,6 +19,23 @@ export const uploadResume = async (req, res) => {
                 message: "Please upload a resume."
             });
         }
+
+        const existingResume = await Resume.findOne({
+            user: req.user._id,
+        });
+
+        if (
+            existingResume &&
+            existingResume.nextUploadAt &&
+            existingResume.nextUploadAt > new Date()
+        ) {
+            return res.status(429).json({
+                success: false,
+                message: "You can upload another resume after 1 hour.",
+                nextUploadAt: existingResume.nextUploadAt,
+            });
+        }
+        
 
         // Read uploaded PDF
         const buffer = fs.readFileSync(req.file.path);
@@ -48,6 +69,10 @@ export const uploadResume = async (req, res) => {
                 suggestions: analysis.suggestions || [],
 
                 uploadedAt: new Date(),
+
+                nextUploadAt : new Date(
+                    Date.now() + 60 * 60 * 1000
+                )
             },
             {
                 upsert: true,

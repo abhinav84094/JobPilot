@@ -98,6 +98,10 @@ const resumeSchema = new mongoose.Schema(
       type: Date,
       default: Date.now,
     },
+
+    nextUploadAt: {
+      type: Date,
+    }
   },
   {
     timestamps: true,
