@@ -12,10 +12,9 @@ const navItems = [
   { to: "/recommendations", icon: Search, label: "Recommendations" },
   { to: "/applications", icon: ClipboardList, label: "Applications" },
   { to: "/resume", icon: FileText, label: "Resume" },
-  { to: "/saved", icon: Bookmark, label: "Saved jobs" },
   { to: "/profile", icon: User, label: "Profile" },
-  { to: "/coach", icon: Sparkles, label: "AI coach", badge: "New" },
-  { to: "/settings", icon: Settings, label: "Settings" },
+  { to: "/", icon: Sparkles, label: "AI coach", badge: "Coming Soon" },
+  // { to: "/settings", icon: Settings, label: "Settings" },
 ];
 
 export default function Sidebar() {
@@ -99,7 +98,10 @@ export default function Sidebar() {
     </div>
   </div>
 
-  <button onClick={logout}>LogOut</button>
+  <button
+    onClick={logout}
+    className="text-sm font-medium border border-neutral-200 rounded-lg px-4 py-2 hover:bg-neutral-50 transition-colors flex items-center gap-2"
+  >Log out</button>
 </div>
     </aside>
   );

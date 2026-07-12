@@ -114,7 +114,6 @@ function JobCardSkeleton() {
 
         const meData = await meRes.json();
 
-        console.log("User:", meData);
 
         // backend response:
         // { success:true, user:{...} }
@@ -139,8 +138,6 @@ function JobCardSkeleton() {
         }
 
         const jobsData = await jobsRes.json();
-
-        console.log("Jobs:", jobsData);
 
         // backend response:
         // {
@@ -167,8 +164,6 @@ function JobCardSkeleton() {
 
           if (resumeRes.ok) {
             const resumeData = await resumeRes.json();
-
-            console.log("Resume:", resumeData);
 
             setResumeScore(
               resumeData?.resume?.atsScore ?? null
