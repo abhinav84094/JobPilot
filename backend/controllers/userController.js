@@ -2,6 +2,7 @@ import fs from "fs";
 import { createRequire } from "module";
 import Resume from "../models/Resume.js";
 import { analyzeResume } from "../services/geminiService.js";
+import { promises as fsPromises } from "fs";
 
 const require = createRequire(import.meta.url);
 const pdf = require("pdf-parse/lib/pdf-parse");
@@ -38,17 +39,22 @@ export const uploadResume = async (req, res) => {
         
 
         // Read uploaded PDF
-        const buffer = fs.readFileSync(req.file.path);
+        console.log("req.file:", req.file);
+        console.log("File path:", req.file.path);
+        console.log("File exists:", fs.existsSync(req.file.path));
 
         // Extract text from PDF
+        console.log("Parsing PDF...");
         const data = await pdf(buffer);
 
         // Analyze resume using Gemini
+        console.log("Calling Gemini...");
         const analysis = await analyzeResume(data.text);
 
         console.log(JSON.stringify(analysis, null, 2));
 
         // Save or update resume
+        console.log("Saving to MongoDB...");
         const resume = await Resume.findOneAndUpdate(
             {
                 user: req.user._id,
@@ -102,15 +108,18 @@ export const uploadResume = async (req, res) => {
     } finally {
 
         // Always delete uploaded file
-        if (req.file) {
-            fs.unlink(req.file.path, (err) => {
-                if (err) {
-                    console.error("Failed to delete uploaded file:", err);
-                }
-            });
-        }
 
+    if (req.file) {
+        try {
+            console.log("Deleting:", req.file.path);
+            await fsPromises.unlink(req.file.path);
+            console.log("Deleted successfully");
+        } catch (err) {
+            console.error("Delete failed:", err);
+        }
     }
+}
+
 };
 
 

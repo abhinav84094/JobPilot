@@ -103,6 +103,7 @@ export const scrapeLinkedInJobs = async (query) => {
     await page.goto(url, {
         waitUntil: "domcontentloaded",
     });
+    
 
     await page.waitForSelector(".base-search-card");
 
