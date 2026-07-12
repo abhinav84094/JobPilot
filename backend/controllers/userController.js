@@ -38,17 +38,16 @@ export const uploadResume = async (req, res) => {
         }
         
 
-        // Read uploaded PDF
         console.log("req.file:", req.file);
-        console.log("File path:", req.file.path);
-        console.log("File exists:", fs.existsSync(req.file.path));
 
-        // Extract text from PDF
-        console.log("Parsing PDF...");
+        if (!fs.existsSync(req.file.path)) {
+            throw new Error(`File not found: ${req.file.path}`);
+        }
+
+        const buffer = fs.readFileSync(req.file.path);
+
         const data = await pdf(buffer);
 
-        // Analyze resume using Gemini
-        console.log("Calling Gemini...");
         const analysis = await analyzeResume(data.text);
 
         console.log(JSON.stringify(analysis, null, 2));
@@ -89,6 +88,16 @@ export const uploadResume = async (req, res) => {
         // Link resume to user
         req.user.resume = resume._id;
         await req.user.save();
+
+        console.log(req.file);
+
+        console.log("Current Directory:", process.cwd());
+
+        console.log("Path:", req.file.path);
+
+        console.log("Exists:", fs.existsSync(req.file.path));
+
+        console.log("Files:", fs.readdirSync("uploads"));
 
         res.status(200).json({
             success: true,

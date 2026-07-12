@@ -8,6 +8,7 @@ import jobRoutes from "./routes/jobRoutes.js"
 import cors from "cors"
 import { startJobScraper } from "./cron/scrapeJobsCron.js";
 import { startCleanupCron } from "./cron/cleanupJobsCron.js";
+import fs from "fs";
 
 
 dotenv.config();
@@ -25,6 +26,12 @@ app.use(
 );
 
 
+
+
+if (!fs.existsSync("uploads")) {
+    fs.mkdirSync("uploads", { recursive: true });
+    console.log("Uploads folder created");
+}
 
 app.use("/api/user", userRoutes);
 app.use("/api/auth", authRoutes);
