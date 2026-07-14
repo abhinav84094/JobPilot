@@ -1,6 +1,6 @@
 # JobPilot
 
-An intelligent job discovery and application management platform that leverages artificial intelligence to analyze resumes, identify skill gaps, and recommend jobs tailored to individual experience and expertise. JobPilot integrates multiple job sources and uses advanced matching algorithms to connect qualified candidates with suitable opportunities.
+JobPilot is an AI-powered career assistant that helps job seekers analyze resumes, discover relevant jobs, identify missing skills, track applications, and receive personalized job recommendations using Google Gemini AI and intelligent matching algorithms.
 
 ## Table of Contents
 
