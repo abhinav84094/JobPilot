@@ -74,13 +74,42 @@ function LoadingState({ role }) {
 }
 
 /* ---------------- Main page ---------------- */
+// Key used to match a recommended job against an existing application
+const jobKeyOf = (job) => `${job.platform}:${job.jobKey}`;
+
 export default function Recommendations() {
   const { resume, loading: resumeLoading } = useResume();
   const [activeRole, setActiveRole] = useState("");
   const [jobs, setJobs] = useState([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
+  const [appliedKeys, setAppliedKeys] = useState(new Set());
   const hasFetched = useRef(false);
+
+  // Load existing applications once so we can mark already-applied jobs
+  // as "Applied" even after a refresh, instead of re-fetching per card.
+  useEffect(() => {
+    async function fetchApplications() {
+      try {
+        const res = await fetch(`${API_URL}/api/jobs/applications`, {
+          credentials: "include",
+        });
+        const data = await res.json();
+        if (data.success) {
+          setAppliedKeys(
+            new Set(data.applications.map((a) => `${a.platform}:${a.jobId}`))
+          );
+        }
+      } catch {
+        // Non-fatal — cards will just default to "not applied" until clicked
+      }
+    }
+    fetchApplications();
+  }, []);
+
+  const markApplied = (job) => {
+    setAppliedKeys((prev) => new Set(prev).add(jobKeyOf(job)));
+  };
 
   // Automatically drive the search from the resume — no manual query entry
   useEffect(() => {
@@ -165,7 +194,15 @@ export default function Recommendations() {
 
       {!loading && (
         <div className="flex flex-col gap-3">
-          {jobs.map((job) => <JobCard key={job.url} job={job} />)}
+          {jobs.map((job) => (
+            <JobCard
+              key={jobKeyOf(job)}
+              job={job}
+              resumeId={resume?._id}
+              applied={appliedKeys.has(jobKeyOf(job))}
+              onApplied={markApplied}
+            />
+          ))}
         </div>
       )}
     </main>

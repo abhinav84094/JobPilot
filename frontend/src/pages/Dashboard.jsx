@@ -211,7 +211,7 @@ function JobCardSkeleton() {
       tint: "bg-violet-50 text-violet-600",
     },
     {
-      label: "Eligible Jobs",
+      label: "Applied Jobs",
       value: eligibleCount,
       icon: ShieldCheck,
       tint: "bg-emerald-50 text-emerald-600",

@@ -92,6 +92,16 @@ const applicationSchema = new mongoose.Schema(
       type: String,
       default: "",
     },
+    statusHistory: [
+      {
+        status: String,
+        updatedAt: {
+          type: Date,
+          default: Date.now,
+        },
+        note: String,
+      },
+    ],
   },
   {
     timestamps: true,

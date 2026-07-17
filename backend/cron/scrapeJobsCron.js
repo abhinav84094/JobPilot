@@ -5,6 +5,7 @@ import { closeBrowser } from "../services/browser.js";
 
 const JOB_ROLES = [
     "C#", "Java", "Python", "MERN", "JavaScript", 
+    "MS-Office", "recent", 
 
     "Backend Developer",
 

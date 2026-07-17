@@ -97,8 +97,7 @@ export const scrapeLinkedInJobs = async (query) => {
 
     const page = await browser.newPage();
 
-    const url =
-        `https://www.linkedin.com/jobs-guest/jobs/api/seeMoreJobPostings/search?keywords=${encodeURIComponent(query)}&location=India&geoId=102713980&start=0`;
+    const url = `https://www.linkedin.com/jobs-guest/jobs/api/seeMoreJobPostings/search?keywords=${encodeURIComponent(query)}&location=India&geoId=102713980&f_TPR=r86400&start=0`;
 
     await page.goto(url, {
         waitUntil: "domcontentloaded",
