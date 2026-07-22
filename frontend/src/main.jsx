@@ -8,6 +8,7 @@ import { AuthProvider } from "./context/AuthContext.jsx";
 import { ResumeProvider } from "./context/ResumeContext.jsx";
 
 import "./index.css";
+import "./responsive-fixes.css"
 
 ReactDOM.createRoot(document.getElementById("root")).render(
   <React.StrictMode>

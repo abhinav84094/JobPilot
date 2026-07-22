@@ -1,0 +1,347 @@
+/* =========================================================================
+   JobPilot — Responsive Design Fixes
+   -------------------------------------------------------------------------
+   This file patches responsive/layout issues across the app WITHOUT
+   touching any component logic. It works by targeting the exact Tailwind
+   utility classes already present in the JSX and overriding them inside
+   media queries (mobile / tablet), using the same design tokens
+   (spacing, radius, colors) already used in the project.
+
+   HOW TO USE
+   1. Save this file at:  frontend/src/responsive-fixes.css
+   2. Import it LAST in frontend/src/main.jsx, after "./index.css":
+
+        import "./index.css";
+        import "./responsive-fixes.css";
+
+   That's it — no JSX/component changes needed, no functionality changes.
+
+   BREAKPOINTS USED (matches Tailwind's default scale)
+   - Mobile:      <= 640px
+   - Tablet:      641px – 1024px
+   - Desktop:     > 1024px (original design, untouched)
+   ========================================================================= */
+
+
+/* -------------------------------------------------------------------------
+   0. GLOBAL SAFETY NET — kill horizontal scrolling everywhere
+   ------------------------------------------------------------------------- */
+html,
+body,
+#root {
+  max-width: 100%;
+  overflow-x: hidden;
+}
+
+* {
+  min-width: 0; /* prevents flex/grid children from refusing to shrink */
+}
+
+img,
+svg {
+  max-width: 100%;
+  height: auto;
+}
+
+/* Long unbroken strings (emails, URLs, job titles) should wrap, not push
+   the layout wider than the viewport. */
+h1, h2, h3, p, span, a, button {
+  overflow-wrap: break-word;
+  word-break: break-word;
+}
+
+
+/* -------------------------------------------------------------------------
+   1. APP SHELL — Layout.jsx (aside + outlet wrapper)
+   ------------------------------------------------------------------------- */
+@media (max-width: 1024px) {
+  /* The root layout row must be able to stack */
+  .min-h-screen.flex.text-neutral-900 {
+    flex-direction: column;
+  }
+
+  /* Outlet wrapper (main + right rail) should stack instead of
+     squeezing two fixed-width columns side by side */
+  .flex-1.flex.min-w-0 {
+    flex-direction: column;
+  }
+}
+
+
+/* -------------------------------------------------------------------------
+   2. RESPONSIVE NAVIGATION — Sidebar.jsx
+   Converts the fixed 240px vertical sidebar into a sticky, horizontally
+   scrollable top bar on tablet/mobile. All links + the logout button
+   remain fully functional — nothing is removed, only reflowed.
+   ------------------------------------------------------------------------- */
+@media (max-width: 1024px) {
+  aside.w-60 {
+    width: 100%;
+    height: auto;
+    max-height: none;
+    position: sticky;
+    top: 0;
+    z-index: 40;
+    flex-direction: row;
+    align-items: center;
+    gap: 0.75rem;
+    padding: 0.625rem 0.75rem;
+    border-right: none;
+    border-bottom: 1px solid #f5f5f5; /* neutral-100 */
+    overflow-x: auto;
+    overflow-y: visible;
+    background: #ffffff;
+  }
+
+  /* Logo block: shrink and stop it from wrapping */
+  aside.w-60 > div:first-child {
+    flex-shrink: 0;
+    margin-bottom: 0;
+  }
+
+  /* Nav links row: horizontal, scrollable, each item stays on one line */
+  aside.w-60 nav.flex.flex-col {
+    flex-direction: row;
+    flex-wrap: nowrap;
+    overflow-x: auto;
+    gap: 0.375rem;
+    flex: 1 1 auto;
+  }
+
+  aside.w-60 nav a {
+    flex-shrink: 0;
+    white-space: nowrap;
+  }
+
+  /* Profile + logout block: pin to the end of the bar instead of the
+     bottom, keep it compact */
+  aside.w-60 .mt-auto.pt-6 {
+    margin-top: 0;
+    margin-left: auto;
+    padding-top: 0;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    flex-shrink: 0;
+  }
+
+  aside.w-60 .mt-auto.pt-6 button {
+    margin-top: 0;
+    width: auto;
+    padding: 0.5rem 0.875rem;
+    white-space: nowrap;
+  }
+}
+
+@media (max-width: 640px) {
+  /* On phones, hide the name/email text (avatar + logout stay visible)
+     to keep the bar from being crowded — no functionality is lost. */
+  aside.w-60 .mt-auto.pt-6 .min-w-0.flex-1 {
+    display: none;
+  }
+
+  aside.w-60 nav a span:first-child {
+    gap: 0.5rem;
+  }
+}
+
+
+/* -------------------------------------------------------------------------
+   3. PAGE CONTAINERS — Dashboard, Applications, Resume, Recommendations,
+      Profile all use `px-10 py-8` + a `max-w-*` on their <main>.
+      Fixed 40px side padding is too much on small screens.
+   ------------------------------------------------------------------------- */
+@media (max-width: 1024px) {
+  main.px-10 {
+    padding-left: 1.5rem;   /* px-6 */
+    padding-right: 1.5rem;
+    padding-top: 1.75rem;
+    padding-bottom: 1.75rem;
+    max-width: 100%;
+    width: 100%;
+  }
+}
+
+@media (max-width: 640px) {
+  main.px-10 {
+    padding-left: 1rem;     /* px-4 */
+    padding-right: 1rem;
+    padding-top: 1.25rem;
+    padding-bottom: 1.25rem;
+  }
+}
+
+
+/* -------------------------------------------------------------------------
+   4. DASHBOARD — stat cards, header, right rail (Resume Strength)
+   ------------------------------------------------------------------------- */
+@media (max-width: 1024px) {
+  /* 3-up stat cards -> 2-up on tablet */
+  .grid.grid-cols-3.gap-4.mb-10 {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  /* Right rail becomes a full-width block below the main content
+     instead of a cramped 320px column */
+  aside.w-80 {
+    width: 100%;
+    border-left: none;
+    border-top: 1px solid #f5f5f5;
+    padding: 1.5rem;
+  }
+}
+
+@media (max-width: 640px) {
+  /* Header row (greeting + icon buttons) wraps instead of overflowing */
+  .flex.items-start.justify-between.mb-8 {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 1rem;
+  }
+
+  h1.text-2xl {
+    font-size: 1.375rem;
+    line-height: 1.75rem;
+  }
+
+  /* Stat cards -> single column on phones */
+  .grid.grid-cols-3.gap-4.mb-10 {
+    grid-template-columns: 1fr;
+  }
+
+  aside.w-80 {
+    padding: 1.25rem;
+  }
+}
+
+
+/* -------------------------------------------------------------------------
+   5. RESUME PAGE — score card + skills grid
+   ------------------------------------------------------------------------- */
+@media (max-width: 640px) {
+  /* Score card: ring + text + re-upload button wrap cleanly */
+  .rounded-xl.border.border-neutral-100.p-6.flex.items-center.gap-6.mb-6 {
+    flex-wrap: wrap;
+    row-gap: 1rem;
+  }
+
+  /* Skills found / Suggested skills -> stack on phones */
+  .grid.grid-cols-2.gap-4.mb-6 {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (min-width: 641px) and (max-width: 1024px) {
+  .grid.grid-cols-2.gap-4.mb-6 {
+    gap: 1rem;
+  }
+}
+
+
+/* -------------------------------------------------------------------------
+   6. JOB CARDS / APPLICATION CARDS (JobCard.jsx, Applicatons.jsx)
+   ------------------------------------------------------------------------- */
+@media (max-width: 640px) {
+  /* Allow the score-ring + eligibility pill column to drop under the
+     title/company block instead of squeezing it */
+  .rounded-xl.border.border-neutral-200.hover\:border-neutral-300.transition-colors.p-5 > .flex.items-start.gap-4,
+  .rounded-xl.border.border-neutral-200.p-5.flex.items-start.gap-4 {
+    flex-wrap: wrap;
+  }
+
+  /* Bottom action row (skills toggle + apply button) wraps on very
+     narrow screens instead of forcing the button off-canvas */
+  .flex.items-center.justify-between.mt-4.pt-4.border-t.border-neutral-100 {
+    flex-wrap: wrap;
+    gap: 0.75rem;
+  }
+
+  /* Application card header (title/company + status pill) wraps */
+  .flex.items-start.justify-between.gap-3 {
+    flex-wrap: wrap;
+    row-gap: 0.5rem;
+  }
+}
+
+
+/* -------------------------------------------------------------------------
+   7. APPLICATIONS PAGE — status tabs
+   ------------------------------------------------------------------------- */
+@media (max-width: 640px) {
+  .flex.items-center.gap-2.mb-6.border-b.border-neutral-100.overflow-x-auto {
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: thin;
+  }
+}
+
+
+/* -------------------------------------------------------------------------
+   8. RECOMMENDATIONS — confirmation modal
+   Fixed 420px modal overflows viewports narrower than ~440px.
+   ------------------------------------------------------------------------- */
+@media (max-width: 640px) {
+  .fixed.inset-0.bg-black\/40.flex.items-center.justify-center.z-50 {
+    padding: 1rem;
+  }
+
+  .bg-white.rounded-xl.w-\[420px\].p-6.shadow-xl {
+    width: 100%;
+    max-width: 420px;
+  }
+}
+
+
+/* -------------------------------------------------------------------------
+   9. LOGIN PAGE — two-panel layout, fixed-width right column
+   ------------------------------------------------------------------------- */
+@media (max-width: 1024px) {
+  /* Stack the two panels instead of squeezing a fixed 460px column */
+  .min-h-screen.flex > .w-\[460px\] {
+    width: 100%;
+    border-left: none;
+    border-top: 1px solid #f5f5f5;
+    padding: 2.5rem 1.5rem;
+  }
+
+  .min-h-screen.flex {
+    flex-direction: column;
+  }
+
+  .flex-1.bg-gradient-to-br.from-violet-50.via-violet-50.to-indigo-50 {
+    padding: 2.5rem 1.5rem;
+  }
+
+  /* Trust badges: 3-up -> 1-up so text doesn't get crushed */
+  .grid.grid-cols-3.gap-4 {
+    grid-template-columns: 1fr;
+    gap: 0.75rem;
+  }
+}
+
+@media (max-width: 640px) {
+  h1.text-4xl {
+    font-size: 1.75rem;
+    line-height: 2.15rem;
+  }
+
+  .flex-1.bg-gradient-to-br.from-violet-50.via-violet-50.to-indigo-50,
+  .min-h-screen.flex > .w-\[460px\] {
+    padding: 2rem 1.25rem;
+  }
+
+  .max-w-lg.relative.z-10 button {
+    width: 100%;
+    justify-content: center;
+    text-align: center;
+  }
+}
+
+
+/* -------------------------------------------------------------------------
+   10. FLUID / RESPONSIVE TYPOGRAPHY (fallback for any element not
+       covered by a more specific rule above)
+   ------------------------------------------------------------------------- */
+@media (max-width: 640px) {
+  .text-2xl { font-size: 1.375rem; line-height: 1.75rem; }
+  .text-xl  { font-size: 1.125rem; line-height: 1.6rem; }
+}
