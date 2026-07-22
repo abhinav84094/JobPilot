@@ -78,6 +78,8 @@ function LoadingState({ role }) {
 const jobKeyOf = (job) => `${job.platform}:${job.jobKey}`;
 
 export default function Recommendations() {
+  const [pendingApplication, setPendingApplication] = useState(null);
+  const [showConfirmModal, setShowConfirmModal] = useState(false);
   const { resume, loading: resumeLoading } = useResume();
   const [activeRole, setActiveRole] = useState("");
   const [jobs, setJobs] = useState([]);
@@ -109,6 +111,10 @@ export default function Recommendations() {
 
   const markApplied = (job) => {
     setAppliedKeys((prev) => new Set(prev).add(jobKeyOf(job)));
+
+    setJobs((prev) =>
+      prev.filter((j) => jobKeyOf(j) !== jobKeyOf(job))
+    );
   };
 
   // Automatically drive the search from the resume — no manual query entry
@@ -130,7 +136,10 @@ export default function Recommendations() {
         });
         const data = await res.json();
         if (data.success) {
-          setJobs(data.jobs);
+          const filteredJobs = data.jobs.filter(
+            (job) => !appliedKeys.has(jobKeyOf(job))
+          );
+          setJobs(filteredJobs);
         } else {
           setError("Couldn't load jobs right now.");
           setJobs([]);
@@ -143,11 +152,70 @@ export default function Recommendations() {
       }
     }
     fetchJobs();
-  }, [activeRole]);
+  }, [activeRole,appliedKeys]);
+
+  
+
+
+  useEffect(() => {
+    const handleFocus = () => {
+        const pending = sessionStorage.getItem("pendingApplication");
+
+        if (pending) {
+            setShowConfirmModal(true);
+        }
+    };
+
+    window.addEventListener("focus", handleFocus);
+
+    return () => {
+        window.removeEventListener("focus", handleFocus);
+    };
+}, []);
+
+
+const handleApplied = async () => {
+  if (!pendingApplication) return;
+
+  try {
+    const res = await fetch(
+      `${API_URL}/api/jobs/applications/${pendingApplication.applicationId}`,
+      {
+        method: "PATCH",
+        credentials: "include",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          status: "Applied",
+        }),
+      }
+    );
+
+    const data = await res.json();
+
+    if (data.success) {
+      markApplied(pendingApplication.job);
+
+      sessionStorage.removeItem("pendingApplication");
+
+      setPendingApplication(null);
+      setShowConfirmModal(false);
+    }
+  } catch (err) {
+    console.error(err);
+  }
+};
+
+const handleNotYet = () => {
+  sessionStorage.removeItem("pendingApplication");
+
+  setPendingApplication(null);
+  setShowConfirmModal(false);
+};
 
   return (
     <main className="flex-1 px-10 py-8 max-w-3xl">
-      <h1 className="text-2xl font-semibold mb-1">Recommendations</h1>
       <p className="text-sm text-neutral-500 mb-6">
         {loading
           ? "Finding jobs that match your resume..."
@@ -155,7 +223,7 @@ export default function Recommendations() {
       </p>
 
       {/* Role chips — purely derived from the resume, not a free-text search */}
-      {resume?.preferredRoles?.length > 0 && (
+      {/* {resume?.preferredRoles?.length > 0 && (
         <div className="flex flex-wrap gap-2 mb-6">
           {resume.preferredRoles.map((role) => (
             <button
@@ -172,7 +240,7 @@ export default function Recommendations() {
             </button>
           ))}
         </div>
-      )}
+      )} */}
 
       {resumeLoading && (
         <p className="text-sm text-neutral-400 py-8 text-center">Loading your resume...</p>
@@ -196,6 +264,7 @@ export default function Recommendations() {
         <div className="flex flex-col gap-3">
           {jobs.map((job) => (
             <JobCard
+            onApplicationCreated={setPendingApplication}
               key={jobKeyOf(job)}
               job={job}
               resumeId={resume?._id}
@@ -205,6 +274,41 @@ export default function Recommendations() {
           ))}
         </div>
       )}
+
+
+      {showConfirmModal && (
+  <div className="fixed inset-0 bg-black/40 flex items-center justify-center z-50">
+    <div className="bg-white rounded-xl w-[420px] p-6 shadow-xl">
+
+      <h2 className="text-xl font-semibold">
+        Did you submit your application?
+      </h2>
+
+      <p className="text-neutral-500 text-sm mt-2">
+        We'll update your application tracker based on your answer.
+      </p>
+
+      <div className="flex justify-end gap-3 mt-6">
+
+        <button
+          onClick={handleNotYet}
+          className="border rounded-lg px-4 py-2 hover:bg-neutral-50"
+        >
+          Not Yet
+        </button>
+
+        <button
+          onClick={handleApplied}
+          className="bg-violet-600 text-white rounded-lg px-4 py-2 hover:bg-violet-700"
+        >
+          Yes
+        </button>
+
+      </div>
+
+    </div>
+  </div>
+)}
     </main>
   );
 }

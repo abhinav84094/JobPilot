@@ -29,12 +29,29 @@ export const createApplication = async (req, res) => {
       fitScore,
       appliedAutomatically,
       aiReason,
+      status = "Viewed",
     } = req.body;
 
     if (!resume || !jobId || !company || !jobTitle || !platform || !jobUrl) {
       return res.status(400).json({
         success: false,
-        message: "resume, jobId, company, jobTitle, platform, and jobUrl are required.",
+        message:
+          "resume, jobId, company, jobTitle, platform, and jobUrl are required.",
+      });
+    }
+
+    // Check if the user already has an application for this job
+    const existingApplication = await Application.findOne({
+      user: req.user.id,
+      platform,
+      jobId,
+    });
+
+    if (existingApplication) {
+      return res.status(200).json({
+        success: true,
+        application: existingApplication,
+        message: "Application already exists.",
       });
     }
 
@@ -50,20 +67,25 @@ export const createApplication = async (req, res) => {
       fitScore,
       appliedAutomatically,
       aiReason,
-      status: "Applied",
+      status,
+      statusHistory: [
+        {
+          status,
+          note: "Application created",
+        },
+      ],
     });
 
-    res.status(201).json({ success: true, application });
+    res.status(201).json({
+      success: true,
+      application,
+    });
   } catch (err) {
-    // Duplicate key error — this job (same user + platform + jobId) was already saved/applied
-    if (err.code === 11000) {
-      return res.status(409).json({
-        success: false,
-        message: "You've already applied to this job.",
-      });
-    }
     console.error("createApplication error:", err);
-    res.status(500).json({ success: false, message: "Failed to create application." });
+    res.status(500).json({
+      success: false,
+      message: "Failed to create application.",
+    });
   }
 };
 
@@ -72,7 +94,15 @@ export const createApplication = async (req, res) => {
 export const updateApplicationStatus = async (req, res) => {
   try {
     const { status, notes, recruiterContacted } = req.body;
-    const allowedStatuses = ["Saved", "Applied", "Viewed", "Interview", "Offer", "Rejected"];
+
+    const allowedStatuses = [
+      "Saved",
+      "Viewed",
+      "Applied",
+      "Interview",
+      "Offer",
+      "Rejected",
+    ];
 
     if (status && !allowedStatuses.includes(status)) {
       return res.status(400).json({
@@ -81,25 +111,49 @@ export const updateApplicationStatus = async (req, res) => {
       });
     }
 
-    const update = {};
-    if (status !== undefined) update.status = status;
-    if (notes !== undefined) update.notes = notes;
-    if (recruiterContacted !== undefined) update.recruiterContacted = recruiterContacted;
-
-    const application = await Application.findOneAndUpdate(
-      { _id: req.params.id, user: req.user.id },
-      update,
-      { new: true }
-    );
+    const application = await Application.findOne({
+      _id: req.params.id,
+      user: req.user.id,
+    });
 
     if (!application) {
-      return res.status(404).json({ success: false, message: "Application not found." });
+      return res.status(404).json({
+        success: false,
+        message: "Application not found.",
+      });
     }
 
-    res.status(200).json({ success: true, application });
+    // Update fields
+    if (status) {
+      application.status = status;
+
+      application.statusHistory.push({
+        status,
+        note: notes || "",
+      });
+    }
+
+    if (notes !== undefined) {
+      application.notes = notes;
+    }
+
+    if (recruiterContacted !== undefined) {
+      application.recruiterContacted = recruiterContacted;
+    }
+
+    await application.save();
+
+    res.status(200).json({
+      success: true,
+      application,
+    });
   } catch (err) {
     console.error("updateApplicationStatus error:", err);
-    res.status(500).json({ success: false, message: "Failed to update application." });
+
+    res.status(500).json({
+      success: false,
+      message: "Failed to update application.",
+    });
   }
 };
 

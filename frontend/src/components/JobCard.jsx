@@ -3,7 +3,7 @@ import { useState } from "react";
 import { MapPin, ChevronDown, ExternalLink, Sparkles } from "lucide-react";
 
 
-
+const API_URL = import.meta.env.VITE_API_URL;
 
 /* ---------------- Company avatar color ---------------- */
 const palette = ["#171717", "#7c3aed", "#0ea5e9", "#f97316", "#e11d48", "#059669", "#4f46e5", "#d97706"];
@@ -16,10 +16,59 @@ function companyColor(name) {
 
 /* ---------------- Job card ---------------- */
 
-export default function JobCard({ job }) {
+export default function JobCard({
+    job,
+    resumeId,
+    applied,
+    onApplied,onApplicationCreated,
+}){
+
+  
   const [open, setOpen] = useState(false);
   const eligible = job.eligibility?.experience?.eligible;
   const requiredYears = job.eligibility?.experience?.requiredYears ?? 0;
+
+  const handleApply = async () => {
+    try {
+        const res = await fetch(`${API_URL}/api/jobs/applications`, {
+            method: "POST",
+            credentials: "include",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+                resume: resumeId,
+                jobId: job.jobKey,
+                company: job.company,
+                jobTitle: job.title,
+                location: job.location,
+                platform: job.platform,
+                jobUrl: job.jobUrl,
+                fitScore: job.skillScore,
+                status: "Viewed",
+            }),
+        });
+
+        const data = await res.json();
+
+        if (!data.success) return;
+
+        sessionStorage.setItem(
+            "pendingApplication",
+            data.application._id
+        );
+
+        onApplicationCreated?.({
+            applicationId: data.application._id,
+            job,
+        });
+
+        window.open(job.jobUrl, "_blank");
+
+    } catch (err) {
+        console.error(err);
+    }
+};
 
   return (
     <div className="rounded-xl border border-neutral-200 hover:border-neutral-300 transition-colors p-5">
@@ -55,14 +104,14 @@ export default function JobCard({ job }) {
           Skills match ({job.matchedSkills?.length || 0}/{job.requiredSkills?.length || 0})
           <ChevronDown size={14} className={`transition-transform ${open ? "rotate-180" : ""}`} />
         </button>
-        <a
-          href={job.jobUrl}
+        <button
+          onClick={handleApply}
           target="_blank"
           rel="noopener noreferrer"
           className="flex items-center gap-1.5 text-sm font-medium bg-violet-600 hover:bg-violet-700 text-white rounded-lg px-4 py-2 transition-colors"
         >
-          View job <ExternalLink size={13} />
-        </a>
+          Apply job <ExternalLink size={13} />
+        </button>
       </div>
 
       {open && (

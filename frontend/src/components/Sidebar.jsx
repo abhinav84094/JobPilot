@@ -13,7 +13,7 @@ const navItems = [
   { to: "/applications", icon: ClipboardList, label: "Applications" },
   { to: "/resume", icon: FileText, label: "Resume" },
   { to: "/profile", icon: User, label: "Profile" },
-  { to: "/", icon: Sparkles, label: "AI coach", badge: "Coming Soon" },
+  // { to: "/", icon: Sparkles, label: "AI coach", badge: "Coming Soon" },
   // { to: "/settings", icon: Settings, label: "Settings" },
 ];
 
@@ -60,7 +60,7 @@ export default function Sidebar() {
       </nav>
 
       <div className="mt-auto pt-6">
-  <div className="rounded-xl bg-neutral-50 p-4">
+  {/* <div className="rounded-xl bg-neutral-50 p-4">
     <p className="text-sm font-medium">Upgrade to Pro</p>
     <p className="text-xs text-neutral-500 mt-1 leading-relaxed">
       Unlimited applications and AI resume review.
@@ -68,7 +68,10 @@ export default function Sidebar() {
     <button className="mt-3 w-full text-xs font-medium bg-violet-600 hover:bg-violet-700 text-white rounded-lg py-2 transition-colors">
       Upgrade now
     </button>
-  </div>
+  </div> */}
+
+
+
 
   <div className="flex items-center gap-3 mt-5 px-1">
     {user?.picture ? (
@@ -98,10 +101,11 @@ export default function Sidebar() {
     </div>
   </div>
 
-  <button
-    onClick={logout}
-    className="text-sm font-medium border border-neutral-200 rounded-lg px-4 py-2 hover:bg-neutral-50 transition-colors flex items-center gap-2"
-  >Log out</button>
+
+    <button onClick={logout} className="mt-3 w-full text-xs font-medium bg-violet-600 hover:bg-violet-700 text-white rounded-lg py-2 transition-colors">
+      Log Out
+    </button>
+ 
 </div>
     </aside>
   );

@@ -84,13 +84,20 @@ function JobCardSkeleton() {
       </div>
     </div>
   );
-}export default function Dashboard() {
+}
+
+
+
+export default function Dashboard() {
   const [user, setUser] = useState(null);
   const [jobs, setJobs] = useState([]);
+  const [applications, setApplications] = useState([]);
   const [resumeScore, setResumeScore] = useState(null);
 
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
+
+
 
   useEffect(() => {
     const loadDashboard = async () => {
@@ -120,6 +127,28 @@ function JobCardSkeleton() {
 
         setUser(meData.user);
 
+
+        const applicationsRes = await fetch(
+          `${API_BASE}/api/jobs/applications`,
+          {
+            credentials: "include",
+          }
+        );
+
+        if (!applicationsRes.ok) {
+          throw new Error("Unable to load applications.");
+        }
+
+        const applicationsData = await applicationsRes.json();
+
+        setApplications(applicationsData.applications || []);
+
+        const appliedKeys = new Set(
+          (applicationsData.applications || []).map(
+            (a) => `${a.platform}:${a.jobId}`
+          )
+        );
+
         /*
         ==========================
         RECOMMENDED JOBS
@@ -146,7 +175,11 @@ function JobCardSkeleton() {
         //   jobs:[]
         // }
 
-        setJobs(jobsData.jobs || []);
+        const filteredJobs = (jobsData.jobs || []).filter(
+          (job) => !appliedKeys.has(`${job.platform}:${job.jobKey}`)
+        );
+
+        setJobs(filteredJobs);
 
         /*
         ==========================
@@ -195,34 +228,36 @@ function JobCardSkeleton() {
 
   const topJobs = jobs.slice(0, 3);
 
-  const eligibleCount = jobs.filter(
-    (job) => job.eligible
+  const appliedCount = applications.filter(
+    (app) => app.status === "Applied"
   ).length;
 
   const highMatchCount = jobs.filter(
     (job) => (job.fitScore || 0) >= 90
   ).length;
 
-  const statCards = [
-    {
-      label: "Matching Jobs",
-      value: jobs.length,
-      icon: Briefcase,
-      tint: "bg-violet-50 text-violet-600",
-    },
-    {
-      label: "Applied Jobs",
-      value: eligibleCount,
-      icon: ShieldCheck,
-      tint: "bg-emerald-50 text-emerald-600",
-    },
-    {
-      label: "High Match (90%+)",
-      value: highMatchCount,
-      icon: Flame,
-      tint: "bg-orange-50 text-orange-600",
-    },
-  ];
+
+    const statCards = [
+      {
+        label: "Matching Jobs",
+        value: jobs.length,
+        icon: Briefcase,
+        tint: "bg-violet-50 text-violet-600",
+      },
+      {
+        label: "Applied Jobs",
+        value: appliedCount,
+        icon: ShieldCheck,
+        tint: "bg-emerald-50 text-emerald-600",
+      },
+      {
+        label: "High Match (90%+)",
+        value: highMatchCount,
+        icon: Flame,
+        tint: "bg-orange-50 text-orange-600",
+      },
+    ];
+  
   return (
   <>
     <main className="flex-1 px-10 py-8 max-w-4xl">
@@ -311,13 +346,6 @@ function JobCardSkeleton() {
           </>
         )}
 
-        {!loading &&
-          topJobs.map((job) => (
-            <JobCard
-              key={job._id}
-              job={job}
-            />
-          ))}
 
         {!loading && jobs.length === 0 && (
           <div className="rounded-xl border border-dashed border-neutral-200 py-14 text-center">
