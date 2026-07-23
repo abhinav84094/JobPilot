@@ -3,8 +3,6 @@ import { useState } from "react";
 import { MapPin, ChevronDown, ExternalLink, Sparkles } from "lucide-react";
 
 
-const API_URL = import.meta.env.VITE_API_URL;
-
 /* ---------------- Company avatar color ---------------- */
 const palette = ["#171717", "#7c3aed", "#0ea5e9", "#f97316", "#e11d48", "#059669", "#4f46e5", "#d97706"];
 function companyColor(name) {
@@ -18,9 +16,7 @@ function companyColor(name) {
 
 export default function JobCard({
     job,
-    resumeId,
-    applied,
-    onApplied,onApplicationCreated,
+    onApplicationCreated,
 }){
 
   
@@ -28,46 +24,12 @@ export default function JobCard({
   const eligible = job.eligibility?.experience?.eligible;
   const requiredYears = job.eligibility?.experience?.requiredYears ?? 0;
 
-  const handleApply = async () => {
-    try {
-        const res = await fetch(`${API_URL}/api/jobs/applications`, {
-            method: "POST",
-            credentials: "include",
-            headers: {
-                "Content-Type": "application/json",
-            },
-            body: JSON.stringify({
-                resume: resumeId,
-                jobId: job.jobKey,
-                company: job.company,
-                jobTitle: job.title,
-                location: job.location,
-                platform: job.platform,
-                jobUrl: job.jobUrl,
-                fitScore: job.skillScore,
-                status: "Viewed",
-            }),
-        });
+  const handleApply = () => {
+    window.open(job.jobUrl, "_blank");
 
-        const data = await res.json();
-
-        if (!data.success) return;
-
-        sessionStorage.setItem(
-            "pendingApplication",
-            data.application._id
-        );
-
-        onApplicationCreated?.({
-            applicationId: data.application._id,
-            job,
-        });
-
-        window.open(job.jobUrl, "_blank");
-
-    } catch (err) {
-        console.error(err);
-    }
+    onApplicationCreated?.({
+        job,
+    });
 };
 
   return (

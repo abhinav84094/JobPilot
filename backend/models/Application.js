@@ -80,7 +80,6 @@ const applicationSchema = new mongoose.Schema(
       enum: [
         "Saved",
         "Applied",
-        "Viewed",
         "Interview",
         "Offer",
         "Rejected",

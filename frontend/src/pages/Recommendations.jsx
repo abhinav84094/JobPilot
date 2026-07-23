@@ -154,62 +154,45 @@ export default function Recommendations() {
     fetchJobs();
   }, [activeRole,appliedKeys]);
 
-  
-
-
-  useEffect(() => {
-    const handleFocus = () => {
-        const pending = sessionStorage.getItem("pendingApplication");
-
-        if (pending) {
-            setShowConfirmModal(true);
-        }
-    };
-
-    window.addEventListener("focus", handleFocus);
-
-    return () => {
-        window.removeEventListener("focus", handleFocus);
-    };
-}, []);
-
 
 const handleApplied = async () => {
-  if (!pendingApplication) return;
+    if (!pendingApplication) return;
 
-  try {
-    const res = await fetch(
-      `${API_URL}/api/jobs/applications/${pendingApplication.applicationId}`,
-      {
-        method: "PATCH",
-        credentials: "include",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          status: "Applied",
-        }),
-      }
-    );
+    try {
+        const res = await fetch(`${API_URL}/api/jobs/applications`, {
+            method: "POST",
+            credentials: "include",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+                resume: resume?._id,
+                jobId: pendingApplication.jobKey,
+                company: pendingApplication.company,
+                jobTitle: pendingApplication.title,
+                location: pendingApplication.location,
+                platform: pendingApplication.platform,
+                jobUrl: pendingApplication.jobUrl,
+                fitScore: pendingApplication.skillScore,
+                aiReason: pendingApplication.aiReason,
+            }),
+        });
 
-    const data = await res.json();
+        const data = await res.json();
 
-    if (data.success) {
-      markApplied(pendingApplication.job);
+        if (!data.success) return;
 
-      sessionStorage.removeItem("pendingApplication");
+        markApplied(pendingApplication);
 
-      setPendingApplication(null);
-      setShowConfirmModal(false);
+        setPendingApplication(null);
+        setShowConfirmModal(false);
+
+    } catch (err) {
+        console.error(err);
     }
-  } catch (err) {
-    console.error(err);
-  }
 };
 
 const handleNotYet = () => {
-  sessionStorage.removeItem("pendingApplication");
-
   setPendingApplication(null);
   setShowConfirmModal(false);
 };
@@ -262,14 +245,14 @@ const handleNotYet = () => {
 
       {!loading && (
         <div className="flex flex-col gap-3">
-          {jobs.map((job) => (
+            {jobs.map((job) => (
             <JobCard
-            onApplicationCreated={setPendingApplication}
               key={jobKeyOf(job)}
               job={job}
-              resumeId={resume?._id}
-              applied={appliedKeys.has(jobKeyOf(job))}
-              onApplied={markApplied}
+              onApplicationCreated={({ job }) => {
+                  setPendingApplication(job);
+                  setShowConfirmModal(true);
+              }}
             />
           ))}
         </div>

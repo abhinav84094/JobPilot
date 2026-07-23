@@ -29,14 +29,14 @@ export const createApplication = async (req, res) => {
       fitScore,
       appliedAutomatically,
       aiReason,
-      status = "Viewed",
+      status
     } = req.body;
 
-    if (!resume || !jobId || !company || !jobTitle || !platform || !jobUrl) {
+    if ( !jobId || !company || !jobTitle || !platform || !jobUrl) {
       return res.status(400).json({
         success: false,
         message:
-          "resume, jobId, company, jobTitle, platform, and jobUrl are required.",
+          " jobId, company, jobTitle, platform, and jobUrl are required.",
       });
     }
 
@@ -67,10 +67,10 @@ export const createApplication = async (req, res) => {
       fitScore,
       appliedAutomatically,
       aiReason,
-      status,
+      status : "Applied",
       statusHistory: [
         {
-          status,
+          status : "Applied",
           note: "Application created",
         },
       ],
@@ -89,73 +89,6 @@ export const createApplication = async (req, res) => {
   }
 };
 
-// PATCH /api/applications/:id
-// Updates the status of an application (e.g. moving to "Interview" or "Offer")
-export const updateApplicationStatus = async (req, res) => {
-  try {
-    const { status, notes, recruiterContacted } = req.body;
-
-    const allowedStatuses = [
-      "Saved",
-      "Viewed",
-      "Applied",
-      "Interview",
-      "Offer",
-      "Rejected",
-    ];
-
-    if (status && !allowedStatuses.includes(status)) {
-      return res.status(400).json({
-        success: false,
-        message: `Status must be one of: ${allowedStatuses.join(", ")}`,
-      });
-    }
-
-    const application = await Application.findOne({
-      _id: req.params.id,
-      user: req.user.id,
-    });
-
-    if (!application) {
-      return res.status(404).json({
-        success: false,
-        message: "Application not found.",
-      });
-    }
-
-    // Update fields
-    if (status) {
-      application.status = status;
-
-      application.statusHistory.push({
-        status,
-        note: notes || "",
-      });
-    }
-
-    if (notes !== undefined) {
-      application.notes = notes;
-    }
-
-    if (recruiterContacted !== undefined) {
-      application.recruiterContacted = recruiterContacted;
-    }
-
-    await application.save();
-
-    res.status(200).json({
-      success: true,
-      application,
-    });
-  } catch (err) {
-    console.error("updateApplicationStatus error:", err);
-
-    res.status(500).json({
-      success: false,
-      message: "Failed to update application.",
-    });
-  }
-};
 
 // DELETE /api/applications/:id
 export const deleteApplication = async (req, res) => {
