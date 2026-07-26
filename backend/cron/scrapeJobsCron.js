@@ -5,25 +5,47 @@ import { closeBrowser } from "../services/browser.js";
 
 const JOB_ROLES = [
     "C#", "Java", "Python", "MERN", "JavaScript", 
-    "MS-Office", "recent", 
+    "MS-Office", "recent", "Intern", 
+    "Software Engineer Intern",
+    "Frontend Intern",
+    "Backend Intern",
+    "Full Stack Intern",
 
-    "Backend Developer",
+    "Fresher Backend Developer",
 
-    "Frontend Developer",
+    "Fresher Frontend Developer",
 
-    "Full Stack Developer",
+    "Fresher Full Stack Developer",
 
-    "React Developer",
+    "Fresher React Developer",
 
-    "Node.js Developer",
+    "Fresher Node.js Developer",
 
-    "MERN Developer",
+    "Fresher MERN Developer",
 
-    "Java Developer",
+    "Fresher Java Developer",
 
-    "Python Developer",
+    "Fresher Python Developer",
 
-    "Software Engineer",
+    "Fresher Software Engineer",
+
+    // "Backend Developer",
+
+    // "Frontend Developer",
+
+    // "Full Stack Developer",
+
+    // "React Developer",
+
+    // "Node.js Developer",
+
+    // "MERN Developer",
+
+    // "Java Developer",
+
+    // "Python Developer",
+
+    // "Software Engineer",
 
 ];
 
@@ -75,8 +97,8 @@ export const startJobScraper = () => {
     // Initial Scrape
     runScraper();
 
-    // Every 30 Minutes
-    cron.schedule("*/30 * * * *", async () => {
+    // Every 100 Minutes
+    cron.schedule("*/100 * * * *", async () => {
 
         await runScraper();
 
