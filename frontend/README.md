@@ -1,4 +1,4 @@
-# JobPilot Frontend
+# Matchora Frontend
 
 An AI-powered job matching platform frontend built with **React 19**, **Vite**, and **Tailwind CSS**. This application analyzes user resumes and recommends jobs that match their skills, experience, and career goals.
 

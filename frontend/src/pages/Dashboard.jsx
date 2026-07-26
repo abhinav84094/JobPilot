@@ -12,9 +12,6 @@ import {
   ArrowRight,
   Sparkles,
 } from "lucide-react";
-import JobCard from "../components/JobCard.jsx"
-
-
 
 const API_BASE =
   import.meta.env.VITE_API_URL || "http://localhost:5000";
@@ -410,7 +407,15 @@ export default function Dashboard() {
               />
 
               <div>
-                <p className="font-semibold text-emerald-600">
+                <p
+                  className={`font-semibold ${
+                    resumeScore >= 85
+                      ? "text-emerald-600"
+                      : resumeScore >= 70
+                      ? "text-indigo-600"
+                      : "text-amber-600"
+                  }`}
+                >
                   {resumeScore >= 85
                     ? "Excellent"
                     : resumeScore >= 70

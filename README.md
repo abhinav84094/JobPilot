@@ -1,6 +1,6 @@
-# JobPilot
+# Matchora
 
-JobPilot is an AI-powered career assistant that helps job seekers analyze resumes, discover relevant jobs, identify missing skills, track applications, and receive personalized job recommendations using Google Gemini AI and intelligent matching algorithms.
+Matchora is an AI-powered career assistant that helps job seekers analyze resumes, discover relevant jobs, identify missing skills, track applications, and receive personalized job recommendations using Google Gemini AI and intelligent matching algorithms.
 
 ## Table of Contents
 
@@ -21,7 +21,7 @@ JobPilot is an AI-powered career assistant that helps job seekers analyze resume
 
 ## Overview
 
-JobPilot is a full-stack application designed to streamline the job search process through intelligent automation and AI-powered analysis. The platform consists of three primary components:
+Matchora is a full-stack application designed to streamline the job search process through intelligent automation and AI-powered analysis. The platform consists of three primary components:
 
 1. **Authentication System** - Secure user onboarding via Google OAuth 2.0 with JWT-based session management
 2. **Resume Intelligence Engine** - PDF resume parsing and analysis using Google Gemini AI to extract structured professional data
