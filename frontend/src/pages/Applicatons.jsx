@@ -1,6 +1,6 @@
 import { useState, useEffect, useMemo } from "react";
 import {
-  MapPin, Loader2, ClipboardList, ExternalLink,
+  MapPin, ClipboardList, ExternalLink,
 } from "lucide-react";
 
 const API_BASE = import.meta.env.VITE_API_URL ;

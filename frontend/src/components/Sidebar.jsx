@@ -1,14 +1,14 @@
 import { NavLink } from "react-router-dom";
 import {
-  Home, Search, ClipboardList, FileText, Bookmark,
-  User, Sparkles, Settings,
+  Home, Search, ClipboardList, FileText,
+  User,
 } from "lucide-react";
 import { useAuth } from "../hooks/useAuth";
 
 
 
 const navItems = [
-  { to: "/", icon: Home, label: "Dashboard" },
+  { to: "/dashboard", icon: Home, label: "Dashboard" },
   { to: "/recommendations", icon: Search, label: "Recommendations" },
   { to: "/applications", icon: ClipboardList, label: "Applications" },
   { to: "/resume", icon: FileText, label: "Resume" },
@@ -37,7 +37,7 @@ export default function Sidebar() {
           <NavLink
             key={item.to}
             to={item.to}
-            end={item.to === "/"}
+            end={item.to === "/dashboard"}
             className={({ isActive }) =>
               `flex items-center justify-between px-3 py-2 rounded-lg text-sm transition-colors ${
                 isActive

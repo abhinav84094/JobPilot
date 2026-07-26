@@ -1,12 +1,8 @@
-import { MapPin, ChevronDown, ExternalLink, Sparkles } from "lucide-react";
-
-
-
 /* ---------------- Score ring ---------------- */
 function ringColor(score) {
-  if (score >= 60) return "#059669";
-  if (score >= 40) return "#4f46e5";
-  return "#d97706";
+  if (score >= 70) return "#059669"; // green — strong match
+  if (score >= 40) return "#d97706"; // amber — partial match
+  return "#dc2626"; // red — weak match
 }
 
 

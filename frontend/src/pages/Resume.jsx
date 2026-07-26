@@ -8,6 +8,7 @@ import {
   GraduationCap,
   FolderGit2,
   Upload,
+  Loader2,
 } from "lucide-react";
 
 const API_URL = import.meta.env.VITE_API_URL;
@@ -323,8 +324,9 @@ function UploadZone({ onUploaded }) {
 
   if (loading) {
     return (
-      <main className="flex-1 px-10 py-8">
-        Loading...
+      <main className="flex-1 px-10 py-8 max-w-3xl flex items-center gap-2 text-neutral-400 text-sm">
+        <Loader2 size={16} className="animate-spin" />
+        Loading your resume...
       </main>
     );
   }
