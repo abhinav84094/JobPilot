@@ -27,9 +27,9 @@ export default function Sidebar() {
     <aside className="w-60 shrink-0 border-r border-neutral-100 flex flex-col py-6 px-4 sticky top-0 h-dvh">
       <div className="flex items-center gap-2 px-2 mb-8">
         <div className="w-7 h-7 rounded-lg bg-violet-600 flex items-center justify-center">
-          <span className="text-white text-sm font-bold">J</span>
+          <span className="text-white text-sm font-bold">M</span>
         </div>
-        <span className="font-semibold">JobPilot</span>
+        <span className="font-semibold">Matchora</span>
       </div>
 
       <nav className="flex flex-col gap-1">
