@@ -2,13 +2,10 @@ import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import {
   Bell,
-  Menu,
   Briefcase,
   ShieldCheck,
   Flame,
   ChevronRight,
-  ChevronDown,
-  MapPin,
   ArrowRight,
   Sparkles,
 } from "lucide-react";
@@ -23,11 +20,11 @@ function ScoreRing({ score = 0, size = 44 }) {
   const offset = c - (score / 100) * c;
 
   const color =
-    score >= 90
+    score >= 85
       ? "#059669"
-      : score >= 80
-      ? "#4f46e5"
-      : "#d97706";
+      : score >= 70
+      ? "#d97706"
+      : "#dc2626";
 
   return (
     <div
@@ -223,8 +220,6 @@ export default function Dashboard() {
   ==========================
   */
 
-  const topJobs = jobs.slice(0, 3);
-
   const appliedCount = applications.filter(
     (app) => app.status === "Applied"
   ).length;
@@ -274,12 +269,12 @@ export default function Dashboard() {
         </div>
 
         <div className="flex items-center gap-3">
-          <button className="w-9 h-9 rounded-full border border-neutral-200 flex items-center justify-center">
+          <button
+            title="Notifications coming soon"
+            disabled
+            className="w-9 h-9 rounded-full border border-neutral-200 flex items-center justify-center text-neutral-300 cursor-not-allowed"
+          >
             <Bell size={16} />
-          </button>
-
-          <button className="w-9 h-9 rounded-full border border-neutral-200 flex items-center justify-center">
-            <Menu size={16} />
           </button>
         </div>
       </div>
@@ -412,8 +407,8 @@ export default function Dashboard() {
                     resumeScore >= 85
                       ? "text-emerald-600"
                       : resumeScore >= 70
-                      ? "text-indigo-600"
-                      : "text-amber-600"
+                      ? "text-amber-600"
+                      : "text-red-600"
                   }`}
                 >
                   {resumeScore >= 85
@@ -434,6 +429,42 @@ export default function Dashboard() {
               className="block mt-6 text-center bg-violet-600 text-white rounded-lg py-2"
             >
               Improve Resume
+            </Link>
+          </>
+        )}
+      </div>
+
+      <div className="rounded-xl border border-neutral-100 p-5 mt-5">
+        <p className="font-semibold mb-4">Your Applications</p>
+
+        {applications.length === 0 ? (
+          <>
+            <p className="text-sm text-neutral-500">
+              You haven't applied to any jobs yet.
+            </p>
+
+            <Link
+              to="/recommendations"
+              className="block mt-4 text-center border border-violet-200 text-violet-600 rounded-lg py-2 text-sm font-medium hover:bg-violet-50 transition"
+            >
+              Browse Recommendations
+            </Link>
+          </>
+        ) : (
+          <>
+            <p className="text-3xl font-semibold">
+              {applications.length}
+            </p>
+            <p className="text-xs text-neutral-400 mt-1">
+              {applications.length === 1 ? "application" : "applications"} tracked
+            </p>
+
+            <Link
+              to="/applications"
+              className="flex items-center justify-center gap-1 mt-5 text-center border border-neutral-200 rounded-lg py-2 text-sm font-medium hover:border-neutral-300 transition"
+            >
+              View Applications
+              <ChevronRight size={14} />
             </Link>
           </>
         )}

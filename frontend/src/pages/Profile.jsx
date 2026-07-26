@@ -1,8 +1,9 @@
 import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import {
-  User, Mail, Calendar, FileText, Bell, LogOut, Trash2, Loader2,
+  User, Mail, Calendar, FileText, Bell, LogOut, Loader2,
 } from "lucide-react";
+import { useAuth } from "../hooks/useAuth";
 
 const API_BASE = import.meta.env.VITE_API_URL ;
 
@@ -21,6 +22,7 @@ function SectionCard({ icon: Icon, title, children }) {
 }
 
 export default function Profile() {
+  const { logout } = useAuth();
   const [user, setUser] = useState(null);
   const [resume, setResume] = useState(null);
   const [loading, setLoading] = useState(true);
@@ -60,29 +62,12 @@ export default function Profile() {
   }, []);
 
   async function handleLogout() {
-    try {
-      await fetch(`${API_BASE}/api/auth/logout`, { method: "POST", credentials: "include" });
-    } finally {
-      window.location.href = "/";
-    }
+    await logout();
   }
 
-  async function handleDeleteAccount() {
-    const confirmed = window.confirm(
-      "This will permanently delete your account, resume, and application history. This can't be undone. Continue?"
-    );
-    if (!confirmed) return;
-    try {
-      const res = await fetch(`${API_BASE}/api/user/account`, {
-        method: "DELETE",
-        credentials: "include",
-      });
-      if (!res.ok) throw new Error("Failed to delete account");
-      window.location.href = "/";
-    } catch (err) {
-      alert(err.message || "Something went wrong deleting your account");
-    }
-  }
+  // Delete-account flow is hidden until the backend exposes
+  // DELETE /api/user/account. Re-add handleDeleteAccount + the
+  // button in "Account actions" once that endpoint ships.
 
   if (loading) {
     return (
@@ -168,16 +153,21 @@ export default function Profile() {
 
         {/* Notifications */}
         <SectionCard icon={Bell} title="Notifications">
-          <label className="flex items-center justify-between cursor-pointer">
+          <label className="flex items-center justify-between opacity-60 cursor-not-allowed">
             <div>
-              <p className="text-sm font-medium">Email alerts for new matches</p>
+              <p className="text-sm font-medium flex items-center gap-2">
+                Email alerts for new matches
+                <span className="text-[10px] bg-violet-100 text-violet-600 px-1.5 py-0.5 rounded-full">
+                  Coming Soon
+                </span>
+              </p>
               <p className="text-xs text-neutral-400 mt-0.5">Get notified when a high-fit job is found.</p>
             </div>
             <input
               type="checkbox"
               checked={notifyEmail}
-              onChange={(e) => setNotifyEmail(e.target.checked)}
-              className="w-4 h-4 accent-violet-600"
+              disabled
+              className="w-4 h-4 accent-violet-600 cursor-not-allowed"
             />
           </label>
         </SectionCard>

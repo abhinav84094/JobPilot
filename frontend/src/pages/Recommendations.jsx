@@ -1,6 +1,6 @@
 import { useState, useEffect, useRef } from "react";
 import { useResume } from "../hooks/useResume";
-import { MapPin, ChevronDown, ExternalLink, Sparkles } from "lucide-react";
+import { Sparkles } from "lucide-react";
 import JobCard from "../components/JobCard.jsx"
 
 
