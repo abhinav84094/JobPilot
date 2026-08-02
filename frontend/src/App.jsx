@@ -7,11 +7,14 @@ import Resume from "./pages/Resume.jsx";
 import Recommendations from "./pages/Recommendations.jsx";
 import Profile from "./pages/Profile.jsx";
 import Applications from "./pages/Applicatons.jsx";
+import AboutMatchora from "./pages/AboutMatchora.jsx";
 
 export default function App() {
   return (
     <Routes>
       <Route path="/" element={<Login />} />
+      <Route path="/aboutMatchora" element={<AboutMatchora/>}/>
+
       <Route
         element={
           <ProtectedRoute>
