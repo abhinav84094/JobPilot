@@ -9,10 +9,15 @@ import {
   ChevronRight,
   ArrowRight,
   Sparkles,
+  MessageSquare,
+  Send,
 } from "lucide-react";
 
 const API_BASE =
   import.meta.env.VITE_API_URL || "http://localhost:5000";
+
+// TODO: replace with the real support number (with country code, no + or spaces) e.g. "91XXXXXXXXXX"
+const WHATSAPP_SUPPORT_NUMBER = "PLACEHOLDER_NUMBER";
 
 function ScoreRing({ score = 0, size = 44 }) {
   const stroke = 4;
@@ -94,6 +99,12 @@ export default function Dashboard() {
 
   const [pendingApplication, setPendingApplication] = useState(null);
   const [showConfirmModal, setShowConfirmModal] = useState(false);
+
+  const [showFeedbackModal, setShowFeedbackModal] = useState(false);
+  const [feedbackText, setFeedbackText] = useState("");
+  const [feedbackSubmitting, setFeedbackSubmitting] = useState(false);
+  const [feedbackSubmitted, setFeedbackSubmitted] = useState(false);
+  const [feedbackError, setFeedbackError] = useState("");
 
 
 
@@ -311,6 +322,44 @@ export default function Dashboard() {
     setShowConfirmModal(false);
   };
 
+  const handleSubmitFeedback = async () => {
+    if (!feedbackText.trim()) return;
+
+    setFeedbackSubmitting(true);
+    setFeedbackError("");
+
+    try {
+      const res = await fetch(`${API_BASE}/api/feedback`, {
+        method: "POST",
+        credentials: "include",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ message: feedbackText.trim() }),
+      });
+
+      const data = await res.json();
+
+      if (!data.success) {
+        throw new Error(data.message || "Something went wrong.");
+      }
+
+      setFeedbackSubmitted(true);
+      setFeedbackText("");
+    } catch (err) {
+      setFeedbackError(err.message || "Failed to submit feedback.");
+    } finally {
+      setFeedbackSubmitting(false);
+    }
+  };
+
+  const closeFeedbackModal = () => {
+    setShowFeedbackModal(false);
+    setFeedbackSubmitted(false);
+    setFeedbackError("");
+    setFeedbackText("");
+  };
+
   return (
   <>
     <main className="flex-1 px-10 py-8 max-w-4xl">
@@ -507,40 +556,24 @@ export default function Dashboard() {
         )}
       </div>
 
-      <div className="rounded-xl border border-neutral-100 p-5 mt-5">
-        <p className="font-semibold mb-4">Your Applications</p>
+      <div className="rounded-xl border border-neutral-100 p-5 mt-5 space-y-3">
+        <button
+          onClick={() => setShowFeedbackModal(true)}
+          className="w-full flex items-center justify-center gap-2 border border-neutral-200 rounded-lg py-2.5 text-sm font-medium hover:border-neutral-300 hover:bg-neutral-50 transition"
+        >
+          <MessageSquare size={15} />
+          Share Feedback
+        </button>
 
-        {applications.length === 0 ? (
-          <>
-            <p className="text-sm text-neutral-500">
-              You haven't applied to any jobs yet.
-            </p>
-
-            <Link
-              to="/recommendations"
-              className="block mt-4 text-center border border-violet-200 text-violet-600 rounded-lg py-2 text-sm font-medium hover:bg-violet-50 transition"
-            >
-              Browse Recommendations
-            </Link>
-          </>
-        ) : (
-          <>
-            <p className="text-3xl font-semibold">
-              {applications.length}
-            </p>
-            <p className="text-xs text-neutral-400 mt-1">
-              {applications.length === 1 ? "application" : "applications"} tracked
-            </p>
-
-            <Link
-              to="/applications"
-              className="flex items-center justify-center gap-1 mt-5 text-center border border-neutral-200 rounded-lg py-2 text-sm font-medium hover:border-neutral-300 transition"
-            >
-              View Applications
-              <ChevronRight size={14} />
-            </Link>
-          </>
-        )}
+        <a
+          href={`https://wa.me/${WHATSAPP_SUPPORT_NUMBER}`}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="w-full flex items-center justify-center gap-2 border border-emerald-200 text-emerald-700 rounded-lg py-2.5 text-sm font-medium hover:bg-emerald-50 transition"
+        >
+          <Send size={15} />
+          Chat on WhatsApp
+        </a>
       </div>
     </aside>
 
@@ -570,6 +603,67 @@ export default function Dashboard() {
               Yes
             </button>
           </div>
+        </div>
+      </div>
+    )}
+
+    {showFeedbackModal && (
+      <div className="fixed inset-0 bg-black/40 flex items-center justify-center z-50">
+        <div className="bg-white rounded-xl w-[420px] p-6 shadow-xl">
+          {feedbackSubmitted ? (
+            <>
+              <h2 className="text-xl font-semibold">Thank you!</h2>
+              <p className="text-neutral-500 text-sm mt-2">
+                Your feedback has been submitted. We really appreciate it.
+              </p>
+
+              <div className="flex justify-end mt-6">
+                <button
+                  onClick={closeFeedbackModal}
+                  className="bg-violet-600 text-white rounded-lg px-4 py-2 hover:bg-violet-700"
+                >
+                  Close
+                </button>
+              </div>
+            </>
+          ) : (
+            <>
+              <h2 className="text-xl font-semibold">Share your feedback</h2>
+              <p className="text-neutral-500 text-sm mt-2">
+                Tell us what's working, what's not, or what you'd like to see.
+              </p>
+
+              <textarea
+                value={feedbackText}
+                onChange={(e) => setFeedbackText(e.target.value)}
+                rows={5}
+                maxLength={2000}
+                placeholder="Type your feedback here..."
+                className="w-full mt-4 border border-neutral-200 rounded-lg p-3 text-sm resize-none focus:outline-none focus:border-violet-400"
+              />
+
+              {feedbackError && (
+                <p className="text-red-600 text-sm mt-2">{feedbackError}</p>
+              )}
+
+              <div className="flex justify-end gap-3 mt-4">
+                <button
+                  onClick={closeFeedbackModal}
+                  className="border rounded-lg px-4 py-2 hover:bg-neutral-50"
+                >
+                  Cancel
+                </button>
+
+                <button
+                  onClick={handleSubmitFeedback}
+                  disabled={feedbackSubmitting || !feedbackText.trim()}
+                  className="bg-violet-600 text-white rounded-lg px-4 py-2 hover:bg-violet-700 disabled:opacity-50 disabled:cursor-not-allowed"
+                >
+                  {feedbackSubmitting ? "Submitting..." : "Submit"}
+                </button>
+              </div>
+            </>
+          )}
         </div>
       </div>
     )}
