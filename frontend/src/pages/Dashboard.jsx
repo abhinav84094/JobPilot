@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
+import JobCard from "../components/JobCard.jsx";
 import {
   Bell,
   Briefcase,
@@ -90,6 +91,9 @@ export default function Dashboard() {
 
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
+
+  const [pendingApplication, setPendingApplication] = useState(null);
+  const [showConfirmModal, setShowConfirmModal] = useState(false);
 
 
 
@@ -220,6 +224,8 @@ export default function Dashboard() {
   ==========================
   */
 
+  const topJobs = jobs.slice(0, 3);
+
   const appliedCount = applications.filter(
     (app) => app.status === "Applied"
   ).length;
@@ -250,6 +256,61 @@ export default function Dashboard() {
       },
     ];
   
+  const handleApplied = async () => {
+    if (!pendingApplication) return;
+
+    try {
+      const res = await fetch(`${API_BASE}/api/jobs/applications`, {
+        method: "POST",
+        credentials: "include",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          jobId: pendingApplication.jobKey,
+          company: pendingApplication.company,
+          jobTitle: pendingApplication.title,
+          location: pendingApplication.location,
+          platform: pendingApplication.platform,
+          jobUrl: pendingApplication.jobUrl,
+          fitScore: pendingApplication.skillScore,
+          aiReason: pendingApplication.aiReason,
+        }),
+      });
+
+      const data = await res.json();
+
+      if (!data.success) return;
+
+      setApplications((prev) => [
+        ...prev,
+        {
+          jobId: pendingApplication.jobKey,
+          platform: pendingApplication.platform,
+          status: "Applied",
+        },
+      ]);
+
+      setJobs((prev) =>
+        prev.filter(
+          (j) =>
+            `${j.platform}:${j.jobKey}` !==
+            `${pendingApplication.platform}:${pendingApplication.jobKey}`
+        )
+      );
+
+      setPendingApplication(null);
+      setShowConfirmModal(false);
+    } catch (err) {
+      console.error(err);
+    }
+  };
+
+  const handleNotYet = () => {
+    setPendingApplication(null);
+    setShowConfirmModal(false);
+  };
+
   return (
   <>
     <main className="flex-1 px-10 py-8 max-w-4xl">
@@ -358,6 +419,18 @@ export default function Dashboard() {
             </Link>
           </div>
         )}
+
+        {!loading &&
+          topJobs.map((job) => (
+            <JobCard
+              key={`${job.platform}:${job.jobKey}`}
+              job={job}
+              onApplicationCreated={({ job }) => {
+                setPendingApplication(job);
+                setShowConfirmModal(true);
+              }}
+            />
+          ))}
       </div>
 
       {!loading && jobs.length > 0 && (
@@ -470,6 +543,36 @@ export default function Dashboard() {
         )}
       </div>
     </aside>
+
+    {showConfirmModal && (
+      <div className="fixed inset-0 bg-black/40 flex items-center justify-center z-50">
+        <div className="bg-white rounded-xl w-[420px] p-6 shadow-xl">
+          <h2 className="text-xl font-semibold">
+            Did you submit your application?
+          </h2>
+
+          <p className="text-neutral-500 text-sm mt-2">
+            We'll update your application tracker based on your answer.
+          </p>
+
+          <div className="flex justify-end gap-3 mt-6">
+            <button
+              onClick={handleNotYet}
+              className="border rounded-lg px-4 py-2 hover:bg-neutral-50"
+            >
+              Not Yet
+            </button>
+
+            <button
+              onClick={handleApplied}
+              className="bg-violet-600 text-white rounded-lg px-4 py-2 hover:bg-violet-700"
+            >
+              Yes
+            </button>
+          </div>
+        </div>
+      </div>
+    )}
   </>
 );
 }
