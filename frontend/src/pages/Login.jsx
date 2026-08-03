@@ -701,7 +701,7 @@ export default function Login() {
           <div className="flex gap-8 text-sm text-neutral-500">
 
             <a
-              href="/terms"
+              href="/privacy"
               className="hover:text-violet-600 transition"
             >
               Terms
@@ -715,7 +715,7 @@ export default function Login() {
             </a>
 
             <a
-              href="/about"
+              href="/aboutMatchora"
               className="hover:text-violet-600 transition"
             >
               About

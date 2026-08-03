@@ -1,38 +1,41 @@
 import {
   Sparkles,
   ArrowRight,
-  Target,
   Brain,
-  Briefcase,
+  FileText,
+  Search,
   ShieldCheck,
   CheckCircle2,
+  Briefcase,
+  Building2
 } from "lucide-react";
+
 import { Link } from "react-router-dom";
 
 export default function AboutMatchora() {
   return (
     <div className="min-h-screen bg-gradient-to-b from-violet-50 via-white to-white">
 
-      {/* Navbar */}
+      {/* ================= NAVBAR ================= */}
 
-      <header className="sticky top-0 z-50 bg-white/80 backdrop-blur border-b border-neutral-100">
+      <header className="sticky top-0 z-50 backdrop-blur bg-white/80 border-b border-neutral-100">
 
-        <div className="max-w-7xl mx-auto px-8 py-5 flex items-center justify-between">
+        <div className="max-w-7xl mx-auto px-8 h-20 flex items-center justify-between">
 
           <Link
             to="/"
             className="flex items-center gap-3"
           >
 
-            <div className="w-11 h-11 rounded-2xl bg-violet-600 flex items-center justify-center">
+            <div className="w-12 h-12 rounded-2xl bg-violet-600 flex items-center justify-center shadow-lg">
 
-              <Sparkles className="text-white" size={20} />
+              <Sparkles className="text-white" size={22} />
 
             </div>
 
             <div>
 
-              <h2 className="font-bold text-2xl">
+              <h2 className="font-black text-2xl">
 
                 Match
                 <span className="text-violet-600">
@@ -53,57 +56,66 @@ export default function AboutMatchora() {
 
           <Link
             to="/"
-            className="rounded-xl border border-neutral-200 px-5 py-2 hover:bg-neutral-50"
+            className="rounded-2xl border border-neutral-200 px-6 py-3 font-semibold hover:bg-neutral-50 transition"
           >
-            Back
+            Back To Home
           </Link>
 
         </div>
 
       </header>
 
-      {/* Hero */}
+      {/* ================= HERO ================= */}
 
-      <section className="max-w-7xl mx-auto px-8 py-24">
+      <section className="max-w-7xl mx-auto px-8 py-24 grid lg:grid-cols-2 gap-20 items-center">
 
-        <div className="text-center">
+        {/* LEFT */}
 
-          <span className="inline-flex items-center gap-2 rounded-full bg-violet-100 text-violet-700 px-5 py-2 font-semibold">
+        <div>
+
+          <span className="inline-flex items-center gap-2 rounded-full bg-violet-100 px-5 py-2 text-violet-700 font-semibold">
 
             <Sparkles size={16} />
 
-            Learn More About Matchora
+            About Matchora
 
           </span>
 
-          <h1 className="text-6xl font-black mt-8 leading-tight">
+          <h1 className="text-6xl font-black leading-tight mt-8">
 
-            Built For Developers.
+            Built For
+
+            <span className="text-violet-600">
+              {" "}Software Engineers
+            </span>
 
             <br />
 
-            Designed To Simplify
+            Looking For Their
 
-            <span className="text-violet-600">
-              {" "}Job Hunting.
-            </span>
+            <br />
+
+            Next LinkedIn Job.
 
           </h1>
 
-          <p className="max-w-3xl mx-auto mt-8 text-lg leading-8 text-neutral-500">
+          <p className="text-neutral-500 text-lg leading-8 mt-8 max-w-xl">
 
-            Matchora is an AI-powered platform that helps software engineers
-            discover relevant tech jobs, analyze resumes, improve ATS scores,
-            and track every application from one modern dashboard.
+            Matchora is an AI-powered platform built specifically
+            for software engineers. We help you analyze your
+            resume, discover matching LinkedIn opportunities,
+            improve your ATS score, and keep every application
+            organized from one dashboard.
 
           </p>
 
-          <div className="flex justify-center gap-5 mt-10">
+          <div className="flex gap-5 mt-10">
 
             <Link
               to="/"
-              className="rounded-2xl bg-violet-600 hover:bg-violet-700 text-white px-8 py-4 flex items-center gap-2 font-semibold"
+              className="rounded-2xl bg-violet-600 text-white px-8 py-4 flex items-center gap-2 font-semibold hover:bg-violet-700 transition"
             >
+
               Start Matching
 
               <ArrowRight size={18} />
@@ -112,88 +124,155 @@ export default function AboutMatchora() {
 
             <a
               href="#story"
-              className="rounded-2xl border border-neutral-200 px-8 py-4 hover:bg-neutral-50 font-semibold"
+              className="rounded-2xl border border-neutral-200 px-8 py-4 font-semibold hover:bg-neutral-50 transition"
             >
+
               Our Story
+
             </a>
 
           </div>
 
         </div>
 
-      </section>
+        {/* RIGHT */}
 
-      {/* Story */}
+        <div className="relative">
 
-      <section
-        id="story"
-        className="max-w-6xl mx-auto px-8 py-24"
-      >
+          <div className="bg-white rounded-[40px] border border-neutral-200 shadow-2xl p-10">
 
-        <div className="grid lg:grid-cols-2 gap-20 items-center">
+            <div className="flex justify-between items-center">
 
-          <div>
+              <div>
 
-            <span className="text-violet-600 font-semibold uppercase tracking-wide">
+                <p className="text-sm text-neutral-500">
 
-              Why Matchora Exists
+                  Resume ATS Score
 
-            </span>
+                </p>
 
-            <h2 className="text-5xl font-black mt-4">
+                <h2 className="text-5xl font-black mt-2">
 
-              Job Searching
-              Shouldn't Feel Like
-              A Full-Time Job.
+                  92%
 
-            </h2>
+                </h2>
 
-            <p className="text-neutral-500 mt-8 leading-8">
+                <p className="text-emerald-600 font-semibold mt-2">
 
-              Every software engineer has experienced spending hours searching
-              across LinkedIn, Indeed, Wellfound, and company career pages,
-              only to upload the same resume repeatedly and lose track of
-              applications.
+                  Excellent
 
-            </p>
+                </p>
 
-            <p className="text-neutral-500 mt-6 leading-8">
+              </div>
 
-              Matchora was created to eliminate this frustration by bringing
-              AI resume analysis, personalized tech job recommendations,
-              ATS insights, and application tracking into one intelligent
-              platform.
+              <div className="w-24 h-24 rounded-full border-[10px] border-violet-600 border-r-violet-200 border-b-violet-200"></div>
 
-            </p>
+            </div>
+
+            <div className="mt-10">
+
+              <h3 className="font-bold">
+
+                Skills Detected
+
+              </h3>
+
+              <div className="flex flex-wrap gap-3 mt-5">
+
+                {[
+                  "React",
+                  "Node.js",
+                  "MongoDB",
+                  "Express",
+                  "JavaScript",
+                  "REST APIs",
+                ].map((skill) => (
+
+                  <span
+                    key={skill}
+                    className="rounded-full bg-violet-100 text-violet-700 px-4 py-2 text-sm"
+                  >
+
+                    {skill}
+
+                  </span>
+
+                ))}
+
+              </div>
+
+            </div>
+
+            <div className="mt-10 rounded-3xl bg-neutral-50 p-6">
+
+              <div className="flex items-center justify-between">
+
+                <div className="flex gap-4">
+
+                  <div className="w-14 h-14 rounded-2xl bg-violet-100 flex items-center justify-center">
+
+                    <Briefcase
+                      className="text-violet-600"
+                    />
+
+                  </div>
+
+                  <div>
+
+                    <h3 className="font-bold">
+
+                      Software Engineer
+
+                    </h3>
+
+                    <p className="text-sm text-neutral-500">
+
+                      Google • Bengaluru
+
+                    </p>
+
+                  </div>
+
+                </div>
+
+                <span className="rounded-full bg-emerald-100 text-emerald-700 px-4 py-2 text-sm font-semibold">
+
+                  95% Match
+
+                </span>
+
+              </div>
+
+            </div>
 
           </div>
 
-          <div className="bg-white rounded-[40px] shadow-xl border border-neutral-100 p-10">
+          {/* Floating Card */}
 
-            <div className="flex gap-5">
+          <div className="absolute -left-10 top-20 bg-white border border-neutral-100 shadow-xl rounded-3xl p-5 w-60">
 
-              <div className="w-16 h-16 rounded-2xl bg-violet-100 flex items-center justify-center">
+            <div className="flex gap-4">
 
-                <Brain
-                  className="text-violet-600"
-                  size={30}
+              <div className="w-12 h-12 rounded-xl bg-blue-100 flex items-center justify-center">
+
+                <Building2
+                  className="text-blue-700"
                 />
 
               </div>
 
               <div>
 
-                <h3 className="font-bold text-2xl">
+                <h4 className="font-semibold">
 
-                  Our Mission
+                  LinkedIn Jobs
 
-                </h3>
+                </h4>
 
-                <p className="text-neutral-500 mt-4 leading-8">
+                <p className="text-xs text-neutral-500 mt-1">
 
-                  Help developers spend less time searching for jobs
-                  and more time preparing for interviews and building
-                  great software.
+                  Personalized opportunities
+                  updated daily.
 
                 </p>
 
@@ -205,61 +284,241 @@ export default function AboutMatchora() {
 
         </div>
 
-      </section>
+      </section>      {/* ================= OUR STORY ================= */}
 
-      {/* Problem vs Solution */}
-
-      <section className="max-w-7xl mx-auto px-8 py-24">
+      <section
+        id="story"
+        className="max-w-7xl mx-auto px-8 py-24"
+      >
 
         <div className="text-center">
 
-          <h2 className="text-5xl font-black">
+          <span className="text-violet-600 font-semibold uppercase tracking-widest">
 
-            The Problem We Solve
+            Our Story
+
+          </span>
+
+          <h2 className="text-5xl font-black mt-5">
+
+            Why Matchora Exists
 
           </h2>
 
-          <p className="text-neutral-500 mt-5">
+          <p className="max-w-3xl mx-auto text-neutral-500 leading-8 mt-8 text-lg">
 
-            Traditional job searching is repetitive and inefficient.
+            Job searching has become unnecessarily repetitive.
+            Developers spend hours searching LinkedIn, opening
+            hundreds of listings, uploading resumes repeatedly,
+            and manually tracking applications.
+
+            <br /><br />
+
+            Matchora was built to simplify that entire workflow.
+            Instead of managing multiple tabs and spreadsheets,
+            everything is organized in one intelligent platform.
 
           </p>
 
         </div>
 
-        <div className="grid lg:grid-cols-2 gap-10 mt-20">
+      </section>
 
-          <div className="rounded-[40px] border border-red-100 bg-red-50 p-10">
+      {/* ================= THE PROBLEM ================= */}
+
+      <section className="bg-neutral-50 py-24">
+
+        <div className="max-w-7xl mx-auto px-8">
+
+          <div className="text-center">
+
+            <span className="text-red-500 font-semibold uppercase">
+
+              The Problem
+
+            </span>
+
+            <h2 className="text-5xl font-black mt-5">
+
+              Traditional Job Search
+              Is Time Consuming
+
+            </h2>
+
+          </div>
+
+          <div className="grid lg:grid-cols-2 gap-10 mt-20">
+
+            <div className="bg-white rounded-[36px] border border-red-100 shadow-sm p-10">
+
+              <h3 className="text-3xl font-bold">
+
+                Current Workflow
+
+              </h3>
+
+              <div className="mt-10 space-y-6">
+
+                {[
+                  "Open LinkedIn",
+                  "Search Jobs",
+                  "Open Hundreds of Listings",
+                  "Upload Resume Again",
+                  "Forget Applications",
+                  "Repeat Tomorrow",
+                ].map((item) => (
+
+                  <div
+                    key={item}
+                    className="flex gap-4 items-center"
+                  >
+
+                    <div className="w-11 h-11 rounded-full bg-red-100 flex items-center justify-center font-bold text-red-600">
+
+                      ✕
+
+                    </div>
+
+                    <p className="text-lg">
+
+                      {item}
+
+                    </p>
+
+                  </div>
+
+                ))}
+
+              </div>
+
+            </div>
+
+            <div className="bg-white rounded-[36px] border border-emerald-100 shadow-sm p-10">
+
+              <h3 className="text-3xl font-bold">
+
+                With Matchora
+
+              </h3>
+
+              <div className="mt-10 space-y-6">
+
+                {[
+                  "Upload Resume Once",
+                  "AI Resume Analysis",
+                  "ATS Score",
+                  "Matching LinkedIn Jobs",
+                  "Track Applications",
+                  "Everything In One Dashboard",
+                ].map((item) => (
+
+                  <div
+                    key={item}
+                    className="flex gap-4 items-center"
+                  >
+
+                    <div className="w-11 h-11 rounded-full bg-emerald-100 flex items-center justify-center">
+
+                      <CheckCircle2
+                        className="text-emerald-600"
+                        size={20}
+                      />
+
+                    </div>
+
+                    <p className="text-lg">
+
+                      {item}
+
+                    </p>
+
+                  </div>
+
+                ))}
+
+              </div>
+
+            </div>
+
+          </div>
+
+        </div>
+
+      </section>
+
+      {/* ================= WHY LINKEDIN ================= */}
+
+      <section className="max-w-7xl mx-auto px-8 py-24">
+
+        <div className="grid lg:grid-cols-2 gap-20 items-center">
+
+          <div>
+
+            <div className="w-20 h-20 rounded-3xl bg-blue-100 flex items-center justify-center">
+
+              <Building2
+                className="text-blue-700"
+                size={42}
+              />
+
+            </div>
+
+            <h2 className="text-5xl font-black mt-8">
+
+              Why We Started
+              With LinkedIn
+
+            </h2>
+
+            <p className="text-neutral-500 text-lg leading-8 mt-8">
+
+              Matchora currently focuses on LinkedIn because
+              it is one of the world's largest professional
+              networking platforms and a primary destination
+              for software engineering opportunities.
+
+            </p>
+
+            <p className="text-neutral-500 text-lg leading-8 mt-6">
+
+              Rather than trying to support every job platform
+              from day one, we're focused on delivering the
+              best experience possible for LinkedIn users first.
+
+            </p>
+
+          </div>
+
+          <div className="bg-gradient-to-br from-blue-600 to-violet-600 rounded-[40px] text-white p-12">
 
             <h3 className="text-3xl font-bold">
 
-              Traditional Job Search
+              Today Matchora Helps You
 
             </h3>
 
             <div className="space-y-6 mt-10">
 
               {[
-                "Search multiple job websites",
-                "Upload resume repeatedly",
-                "Forget where you applied",
-                "No ATS feedback",
-                "Miss relevant opportunities",
-                "Track everything manually",
+                "Discover LinkedIn Tech Jobs",
+                "Analyze Your Resume",
+                "Improve ATS Score",
+                "Track Applications",
+                "Stay Organized",
               ].map((item) => (
 
                 <div
                   key={item}
-                  className="flex gap-4 items-center"
+                  className="flex items-center gap-4"
                 >
 
-                  <div className="w-10 h-10 rounded-full bg-red-100 flex items-center justify-center">
+                  <CheckCircle2 size={22} />
 
-                    ✕
+                  <span className="text-lg">
 
-                  </div>
+                    {item}
 
-                  <p>{item}</p>
+                  </span>
 
                 </div>
 
@@ -269,44 +528,207 @@ export default function AboutMatchora() {
 
           </div>
 
-          <div className="rounded-[40px] border border-emerald-100 bg-emerald-50 p-10">
+        </div>
 
-            <h3 className="text-3xl font-bold">
+      </section>      {/* ================= CORE FEATURES ================= */}
 
-              With Matchora
+      <section className="bg-neutral-50 py-24">
 
-            </h3>
+        <div className="max-w-7xl mx-auto px-8">
 
-            <div className="space-y-6 mt-10">
+          <div className="text-center">
 
-              {[
-                "One dashboard",
-                "AI Resume Analysis",
-                "ATS Score",
-                "Personalized Tech Jobs",
-                "Application Tracker",
-                "Organized Job Search",
-              ].map((item) => (
+            <span className="text-violet-600 font-semibold uppercase tracking-widest">
 
-                <div
-                  key={item}
-                  className="flex gap-4 items-center"
-                >
+              Core Features
 
-                  <div className="w-10 h-10 rounded-full bg-emerald-100 flex items-center justify-center">
+            </span>
+
+            <h2 className="text-5xl font-black mt-5">
+
+              Everything You Need
+              <br />
+              For Your Job Search
+
+            </h2>
+
+            <p className="text-neutral-500 text-lg mt-6 max-w-3xl mx-auto">
+
+              Matchora focuses on helping software engineers
+              discover better opportunities and organize their
+              job search from one dashboard.
+
+            </p>
+
+          </div>
+
+          <div className="grid lg:grid-cols-2 gap-8 mt-20">
+
+            {/* Resume */}
+
+            <div className="bg-white rounded-[36px] border border-neutral-100 shadow-sm p-10 hover:-translate-y-2 transition">
+
+              <div className="w-16 h-16 rounded-2xl bg-violet-100 flex items-center justify-center">
+
+                <Brain
+                  className="text-violet-600"
+                  size={32}
+                />
+
+              </div>
+
+              <h3 className="text-3xl font-bold mt-8">
+
+                AI Resume Analysis
+
+              </h3>
+
+              <p className="text-neutral-500 mt-5 leading-8">
+
+                Upload your resume and receive detailed
+                AI-powered insights before applying.
+
+              </p>
+
+              <div className="space-y-4 mt-8">
+
+                {[
+                  "ATS Score",
+                  "Resume Strengths",
+                  "Missing Skills",
+                  "Improvement Suggestions",
+                  "Keyword Analysis",
+                ].map((item) => (
+
+                  <div
+                    key={item}
+                    className="flex items-center gap-3"
+                  >
 
                     <CheckCircle2
                       className="text-emerald-600"
                       size={18}
                     />
 
+                    {item}
+
                   </div>
 
-                  <p>{item}</p>
+                ))}
 
-                </div>
+              </div>
 
-              ))}
+            </div>
+
+            {/* Jobs */}
+
+            <div className="bg-white rounded-[36px] border border-neutral-100 shadow-sm p-10 hover:-translate-y-2 transition">
+
+              <div className="w-16 h-16 rounded-2xl bg-blue-100 flex items-center justify-center">
+
+                <Search
+                  className="text-blue-600"
+                  size={32}
+                />
+
+              </div>
+
+              <h3 className="text-3xl font-bold mt-8">
+
+                LinkedIn Job Discovery
+
+              </h3>
+
+              <p className="text-neutral-500 mt-5 leading-8">
+
+                Discover software engineering opportunities
+                from LinkedIn based on your resume.
+
+              </p>
+
+              <div className="flex flex-wrap gap-3 mt-8">
+
+                {[
+                  "Software Engineer",
+                  "Frontend",
+                  "Backend",
+                  "Full Stack",
+                  "React",
+                  "Node.js",
+                  "Java",
+                  "Python",
+                ].map((role) => (
+
+                  <span
+                    key={role}
+                    className="rounded-full bg-violet-100 text-violet-700 px-4 py-2 text-sm font-medium"
+                  >
+
+                    {role}
+
+                  </span>
+
+                ))}
+
+              </div>
+
+            </div>
+
+            {/* ATS */}
+
+            <div className="bg-white rounded-[36px] border border-neutral-100 shadow-sm p-10 hover:-translate-y-2 transition">
+
+              <div className="w-16 h-16 rounded-2xl bg-emerald-100 flex items-center justify-center">
+
+                <FileText
+                  className="text-emerald-600"
+                  size={32}
+                />
+
+              </div>
+
+              <h3 className="text-3xl font-bold mt-8">
+
+                ATS Optimization
+
+              </h3>
+
+              <p className="text-neutral-500 mt-5 leading-8">
+
+                Improve your resume before applying
+                and increase your chances of getting
+                shortlisted.
+
+              </p>
+
+            </div>
+
+            {/* Tracker */}
+
+            <div className="bg-white rounded-[36px] border border-neutral-100 shadow-sm p-10 hover:-translate-y-2 transition">
+
+              <div className="w-16 h-16 rounded-2xl bg-orange-100 flex items-center justify-center">
+
+                <Briefcase
+                  className="text-orange-600"
+                  size={32}
+                />
+
+              </div>
+
+              <h3 className="text-3xl font-bold mt-8">
+
+                Application Tracker
+
+              </h3>
+
+              <p className="text-neutral-500 mt-5 leading-8">
+
+                Track every application from
+                Applied to Offer without using
+                spreadsheets.
+
+              </p>
 
             </div>
 
@@ -314,168 +736,56 @@ export default function AboutMatchora() {
 
         </div>
 
-      </section>      {/* CORE FEATURES */}
+      </section>
+
+      {/* ================= CURRENT CAPABILITIES ================= */}
 
       <section className="max-w-7xl mx-auto px-8 py-24">
 
-        <div className="text-center">
+        <div className="grid lg:grid-cols-2 gap-20 items-center">
 
-          <span className="text-violet-600 font-semibold uppercase tracking-wider">
-            Core Features
-          </span>
+          <div>
 
-          <h2 className="text-5xl font-black mt-4">
-            Everything You Need
-            <br />
-            For Your Tech Career
-          </h2>
+            <span className="text-violet-600 font-semibold uppercase tracking-widest">
 
-        </div>
+              Available Today
 
-        <div className="grid lg:grid-cols-2 gap-8 mt-20">
+            </span>
 
-          <div className="bg-white rounded-[32px] border border-neutral-100 shadow-sm p-10 hover:shadow-xl transition">
+            <h2 className="text-5xl font-black mt-5">
 
-            <div className="w-16 h-16 rounded-2xl bg-violet-100 flex items-center justify-center">
+              What You Can
+              Do Today
 
-              <Brain
-                className="text-violet-600"
-                size={30}
-              />
+            </h2>
 
-            </div>
-
-            <h3 className="text-3xl font-bold mt-8">
-              AI Resume Analysis
-            </h3>
-
-            <p className="text-neutral-500 mt-4 leading-8">
-
-              Understand how your resume performs before
-              applying.
-
-            </p>
-
-            <ul className="space-y-4 mt-8">
+            <div className="space-y-5 mt-12">
 
               {[
+                "Google Authentication",
+                "Resume Upload",
+                "Resume Parsing",
+                "AI Resume Analysis",
                 "ATS Score",
-                "Keyword Analysis",
-                "Missing Skills",
-                "Resume Suggestions",
-                "Strengths & Weaknesses",
+                "LinkedIn Job Recommendations",
+                "Application Tracking",
               ].map((item) => (
 
-                <li
+                <div
                   key={item}
-                  className="flex items-center gap-3"
+                  className="flex gap-4 items-center"
                 >
 
                   <CheckCircle2
                     className="text-emerald-600"
-                    size={18}
+                    size={22}
                   />
 
-                  {item}
+                  <span className="text-lg">
 
-                </li>
+                    {item}
 
-              ))}
-
-            </ul>
-
-          </div>
-
-          <div className="bg-white rounded-[32px] border border-neutral-100 shadow-sm p-10 hover:shadow-xl transition">
-
-            <div className="w-16 h-16 rounded-2xl bg-blue-100 flex items-center justify-center">
-
-              <Briefcase
-                className="text-blue-600"
-                size={30}
-              />
-
-            </div>
-
-            <h3 className="text-3xl font-bold mt-8">
-              Smart Job Matching
-            </h3>
-
-            <p className="text-neutral-500 mt-4 leading-8">
-
-              Find software engineering jobs matched to your
-              resume and skills.
-
-            </p>
-
-            <div className="flex flex-wrap gap-3 mt-8">
-
-              {[
-                "Software Engineer",
-                "SDE",
-                "Frontend",
-                "Backend",
-                "Full Stack",
-                "DevOps",
-                "React",
-                "Node.js",
-              ].map((role) => (
-
-                <span
-                  key={role}
-                  className="rounded-full bg-violet-100 text-violet-700 px-4 py-2"
-                >
-
-                  {role}
-
-                </span>
-
-              ))}
-
-            </div>
-
-          </div>
-
-          <div className="bg-white rounded-[32px] border border-neutral-100 shadow-sm p-10 hover:shadow-xl transition">
-
-            <div className="w-16 h-16 rounded-2xl bg-orange-100 flex items-center justify-center">
-
-              <Target
-                className="text-orange-600"
-                size={30}
-              />
-
-            </div>
-
-            <h3 className="text-3xl font-bold mt-8">
-              Application Tracker
-            </h3>
-
-            <p className="text-neutral-500 mt-4 leading-8">
-
-              Never lose track of an application again.
-
-            </p>
-
-            <div className="flex items-center justify-between mt-10">
-
-              {[
-                "Applied",
-                "OA",
-                "Interview",
-                "Offer",
-              ].map((step) => (
-
-                <div
-                  key={step}
-                  className="text-center"
-                >
-
-                  <div className="w-10 h-10 rounded-full bg-violet-100 mx-auto"></div>
-
-                  <p className="mt-3 text-sm">
-                    {step}
-                  </p>
+                  </span>
 
                 </div>
 
@@ -485,25 +795,20 @@ export default function AboutMatchora() {
 
           </div>
 
-          <div className="bg-gradient-to-br from-violet-600 to-purple-600 rounded-[32px] text-white p-10">
+          <div className="bg-gradient-to-br from-violet-600 to-indigo-600 rounded-[40px] text-white p-12">
 
-            <span className="inline-block rounded-full bg-white/20 px-4 py-2">
+            <h3 className="text-3xl font-bold">
 
-              Coming Soon
-
-            </span>
-
-            <h3 className="text-3xl font-bold mt-8">
-
-              Auto Apply
+              Our Goal
 
             </h3>
 
-            <p className="mt-6 leading-8 text-violet-100">
+            <p className="text-violet-100 text-lg leading-8 mt-8">
 
-              Let Matchora automatically apply to matching
-              software engineering jobs based on your
-              preferences.
+              We want every software engineer to spend
+              less time searching for jobs and more
+              time preparing for interviews, learning
+              new skills, and building amazing products.
 
             </p>
 
@@ -513,7 +818,7 @@ export default function AboutMatchora() {
 
       </section>
 
-      {/* WHO IS IT FOR */}
+      {/* ================= WHO IS IT FOR ================= */}
 
       <section className="bg-neutral-50 py-24">
 
@@ -523,19 +828,20 @@ export default function AboutMatchora() {
 
             <h2 className="text-5xl font-black">
 
-              Who Is Matchora For?
+              Built For
 
             </h2>
 
-            <p className="text-neutral-500 mt-6">
+            <p className="text-neutral-500 text-lg mt-5">
 
-              Built specifically for people looking for tech careers.
+              Matchora is designed specifically
+              for people building careers in technology.
 
             </p>
 
           </div>
 
-          <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6 mt-20">
+          <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8 mt-20">
 
             {[
               "Students",
@@ -544,18 +850,18 @@ export default function AboutMatchora() {
               "Frontend Developers",
               "Backend Developers",
               "Full Stack Developers",
-              "Career Switchers",
               "Internship Seekers",
+              "Career Switchers",
             ].map((item) => (
 
               <div
                 key={item}
-                className="bg-white rounded-3xl p-8 border border-neutral-100 text-center shadow-sm hover:shadow-lg transition"
+                className="bg-white rounded-[28px] border border-neutral-100 p-8 shadow-sm text-center hover:shadow-lg transition"
               >
 
                 <Briefcase
                   className="mx-auto text-violet-600"
-                  size={32}
+                  size={34}
                 />
 
                 <h3 className="font-bold mt-6">
@@ -572,170 +878,152 @@ export default function AboutMatchora() {
 
         </div>
 
-      </section>      {/* SECURITY */}
+      </section>      {/* ================= TECHNOLOGY ================= */}
 
       <section className="max-w-7xl mx-auto px-8 py-24">
 
         <div className="text-center">
 
           <span className="text-violet-600 font-semibold uppercase tracking-widest">
-            Security
+
+            Technology
+
           </span>
 
-          <h2 className="text-5xl font-black mt-4">
-            Your Data Stays Yours
+          <h2 className="text-5xl font-black mt-5">
+
+            Built With Modern Technologies
+
           </h2>
 
-          <p className="text-neutral-500 mt-6 max-w-3xl mx-auto">
-            We built Matchora with privacy first. Your resume,
-            applications and personal information are protected.
+          <p className="text-neutral-500 text-lg mt-6 max-w-3xl mx-auto">
+
+            Matchora is built using a modern full-stack
+            JavaScript architecture to deliver a fast,
+            secure and reliable experience.
+
           </p>
 
         </div>
 
-        <div className="grid lg:grid-cols-3 gap-8 mt-20">
+        <div className="grid md:grid-cols-3 lg:grid-cols-6 gap-6 mt-20">
 
-          <div className="bg-white rounded-[32px] border border-neutral-100 p-10 shadow-sm">
+          {[
+            "React",
+            "Node.js",
+            "Express",
+            "MongoDB",
+            "Google OAuth",
+            "Tailwind CSS",
+          ].map((tech) => (
 
-            <ShieldCheck
-              className="text-violet-600"
-              size={42}
-            />
+            <div
+              key={tech}
+              className="bg-white border border-neutral-100 rounded-3xl p-8 shadow-sm hover:-translate-y-1 hover:shadow-lg transition text-center"
+            >
 
-            <h3 className="font-bold text-2xl mt-8">
-              Secure Google Login
-            </h3>
+              <h3 className="font-bold text-lg">
 
-            <p className="text-neutral-500 mt-4 leading-8">
-              Authenticate securely using your Google account.
-              No passwords are stored by Matchora.
-            </p>
+                {tech}
 
-          </div>
+              </h3>
 
-          <div className="bg-white rounded-[32px] border border-neutral-100 p-10 shadow-sm">
+            </div>
 
-            <ShieldCheck
-              className="text-emerald-600"
-              size={42}
-            />
-
-            <h3 className="font-bold text-2xl mt-8">
-              Resume Privacy
-            </h3>
-
-            <p className="text-neutral-500 mt-4 leading-8">
-              Your uploaded resumes remain private and are only
-              used to provide personalized recommendations.
-            </p>
-
-          </div>
-
-          <div className="bg-white rounded-[32px] border border-neutral-100 p-10 shadow-sm">
-
-            <ShieldCheck
-              className="text-blue-600"
-              size={42}
-            />
-
-            <h3 className="font-bold text-2xl mt-8">
-              No Spam
-            </h3>
-
-            <p className="text-neutral-500 mt-4 leading-8">
-              We never sell your information or send unwanted
-              marketing emails.
-            </p>
-
-          </div>
+          ))}
 
         </div>
 
       </section>
 
-      {/* ROADMAP */}
+      {/* ================= SECURITY ================= */}
 
-      <section className="bg-violet-50 py-24">
+      <section className="bg-neutral-50 py-24">
 
         <div className="max-w-7xl mx-auto px-8">
 
           <div className="text-center">
 
-            <h2 className="text-5xl font-black">
-              Product Roadmap
-            </h2>
+            <span className="text-violet-600 font-semibold uppercase tracking-widest">
 
-            <p className="text-neutral-500 mt-5">
-              What we've built and what's coming next.
-            </p>
+              Privacy & Security
+
+            </span>
+
+            <h2 className="text-5xl font-black mt-5">
+
+              Your Data Comes First
+
+            </h2>
 
           </div>
 
-          <div className="grid lg:grid-cols-2 gap-10 mt-20">
+          <div className="grid lg:grid-cols-3 gap-8 mt-20">
 
-            <div className="bg-white rounded-[32px] p-10 shadow-sm">
+            <div className="bg-white rounded-[32px] border border-neutral-100 p-10 shadow-sm">
 
-              <h3 className="text-2xl font-bold mb-8">
-                Available Today
+              <ShieldCheck
+                className="text-violet-600"
+                size={40}
+              />
+
+              <h3 className="text-2xl font-bold mt-8">
+
+                Secure Google Login
+
               </h3>
 
-              {[
-                "Google Authentication",
-                "Resume Upload",
-                "AI Resume Analysis",
-                "ATS Score",
-                "Tech Job Recommendations",
-                "Application Tracking",
-              ].map((item) => (
+              <p className="text-neutral-500 mt-5 leading-8">
 
-                <div
-                  key={item}
-                  className="flex items-center gap-4 mb-5"
-                >
+                Authentication is handled securely
+                through Google OAuth.
 
-                  <CheckCircle2
-                    className="text-emerald-600"
-                    size={20}
-                  />
-
-                  {item}
-
-                </div>
-
-              ))}
+              </p>
 
             </div>
 
-            <div className="bg-white rounded-[32px] p-10 shadow-sm">
+            <div className="bg-white rounded-[32px] border border-neutral-100 p-10 shadow-sm">
 
-              <h3 className="text-2xl font-bold mb-8">
-                Coming Soon
+              <ShieldCheck
+                className="text-emerald-600"
+                size={40}
+              />
+
+              <h3 className="text-2xl font-bold mt-8">
+
+                Resume Privacy
+
               </h3>
 
-              {[
-                "Browser Extension",
-                "Resume Builder",
-                "AI Auto Apply",
-                "Interview Preparation",
-                "Email Alerts",
-                "Company Insights",
-              ].map((item) => (
+              <p className="text-neutral-500 mt-5 leading-8">
 
-                <div
-                  key={item}
-                  className="flex items-center gap-4 mb-5"
-                >
+                Your resume is private and used only
+                to provide personalized analysis
+                and recommendations.
 
-                  <Sparkles
-                    className="text-violet-600"
-                    size={18}
-                  />
+              </p>
 
-                  {item}
+            </div>
 
-                </div>
+            <div className="bg-white rounded-[32px] border border-neutral-100 p-10 shadow-sm">
 
-              ))}
+              <ShieldCheck
+                className="text-blue-600"
+                size={40}
+              />
+
+              <h3 className="text-2xl font-bold mt-8">
+
+                No Password Storage
+
+              </h3>
+
+              <p className="text-neutral-500 mt-5 leading-8">
+
+                Since we use Google authentication,
+                Matchora never stores your passwords.
+
+              </p>
 
             </div>
 
@@ -745,48 +1033,111 @@ export default function AboutMatchora() {
 
       </section>
 
-      {/* CTA */}
+      {/* ================= FAQ ================= */}
 
       <section className="max-w-6xl mx-auto px-8 py-24">
 
-        <div className="rounded-[40px] bg-gradient-to-r from-violet-600 to-purple-600 text-white p-16 text-center">
+        <div className="text-center">
 
-          <h2 className="text-5xl font-black">
+          <span className="text-violet-600 font-semibold uppercase tracking-widest">
 
-            Ready To Land
+            FAQ
+
+          </span>
+
+          <h2 className="text-5xl font-black mt-5">
+
+            Frequently Asked Questions
+
+          </h2>
+
+        </div>
+
+        <div className="space-y-6 mt-20">
+
+          {[
+            {
+              q: "Is Matchora free to use?",
+              a: "Yes. Matchora is currently free for all users.",
+            },
+            {
+              q: "Which job platform is currently supported?",
+              a: "At the moment Matchora focuses on LinkedIn job opportunities.",
+            },
+            {
+              q: "Is my resume secure?",
+              a: "Yes. Your resume is stored securely and is only used for resume analysis and recommendations.",
+            },
+            {
+              q: "Who is Matchora built for?",
+              a: "Students, fresh graduates and software engineers looking for tech opportunities.",
+            },
+          ].map((faq) => (
+
+            <div
+              key={faq.q}
+              className="bg-white rounded-3xl border border-neutral-100 shadow-sm p-8"
+            >
+
+              <h3 className="font-bold text-xl">
+
+                {faq.q}
+
+              </h3>
+
+              <p className="text-neutral-500 mt-4 leading-8">
+
+                {faq.a}
+
+              </p>
+
+            </div>
+
+          ))}
+
+        </div>
+
+      </section>
+
+      {/* ================= CTA ================= */}
+
+      <section className="max-w-6xl mx-auto px-8 pb-24">
+
+        <div className="rounded-[40px] bg-gradient-to-r from-violet-600 to-indigo-600 text-white p-16 text-center">
+
+          <h2 className="text-5xl font-black leading-tight">
+
+            Ready To Discover
             <br />
             Your Next Tech Job?
 
           </h2>
 
-          <p className="mt-8 text-violet-100 text-lg max-w-2xl mx-auto">
+          <p className="text-violet-100 text-lg mt-8 max-w-2xl mx-auto leading-8">
 
-            Join Matchora today and let AI help you
-            discover opportunities, improve your resume,
-            and organize your job search.
+            Join Matchora today and start discovering
+            LinkedIn software engineering opportunities,
+            improve your resume and organize your
+            complete job search.
 
           </p>
 
-          <div className="mt-10">
+          <Link
+            to="/"
+            className="inline-flex items-center gap-3 bg-white text-violet-700 font-semibold rounded-2xl px-8 py-4 mt-10 hover:scale-105 transition"
+          >
 
-            <Link
-              to="/"
-              className="inline-flex items-center gap-3 bg-white text-violet-700 font-semibold rounded-2xl px-8 py-4 hover:scale-105 transition"
-            >
+            Start Matching
 
-              Start Matching
+            <ArrowRight size={18} />
 
-              <ArrowRight size={18} />
-
-            </Link>
-
-          </div>
+          </Link>
 
         </div>
 
       </section>
 
-      {/* FOOTER */}
+      {/* ================= FOOTER ================= */}
 
       <footer className="border-t border-neutral-200">
 
@@ -794,18 +1145,19 @@ export default function AboutMatchora() {
 
           <div>
 
-            <h3 className="font-bold text-2xl">
+            <h2 className="text-2xl font-black">
 
               Match
               <span className="text-violet-600">
                 ora
               </span>
 
-            </h3>
+            </h2>
 
             <p className="text-neutral-500 mt-2">
 
-              AI Powered Platform For Tech Careers.
+              AI Powered Career Platform
+              For Software Engineers.
 
             </p>
 
@@ -813,23 +1165,30 @@ export default function AboutMatchora() {
 
           <div className="flex gap-8 text-sm">
 
-            <Link to="/">Home</Link>
+            <Link
+              to="/"
+              className="hover:text-violet-600"
+            >
+              Home
+            </Link>
 
-            <Link to="/privacy">
+            <Link
+              to="/privacy"
+              className="hover:text-violet-600"
+            >
               Privacy
             </Link>
 
-            <Link to="/terms">
+            <Link
+              to="/terms"
+              className="hover:text-violet-600"
+            >
               Terms
-            </Link>
-
-            <Link to="/contact">
-              Contact
             </Link>
 
           </div>
 
-          <p className="text-neutral-400 text-sm">
+          <p className="text-sm text-neutral-400">
 
             © {new Date().getFullYear()} Matchora.
             All rights reserved.
@@ -841,7 +1200,5 @@ export default function AboutMatchora() {
       </footer>
 
     </div>
-
   );
-
 }
