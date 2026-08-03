@@ -18,7 +18,7 @@ const API_BASE =
   import.meta.env.VITE_API_URL || "http://localhost:5000";
 
 // TODO: replace with the real support number (with country code, no + or spaces) e.g. "91XXXXXXXXXX"
-const WHATSAPP_SUPPORT_NUMBER = import.meta.env.WHATSAPP_SUPPORT_NUMBER;
+const WHATSAPP_SUPPORT_NUMBER = import.meta.env.VITE_WHATSAPP_SUPPORT_NUMBER;
 
 function ScoreRing({ score = 0, size = 44 }) {
   const stroke = 4;
