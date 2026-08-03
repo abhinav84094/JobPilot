@@ -1,6 +1,7 @@
 import { SKILL_ALIASES } from "../utils/skillAliases.js";
 import Job from "../models/Job.js";
 
+
 /**
  * Normalize text
  */
@@ -335,7 +336,8 @@ export const recommendJobs = async (resume) => {
         })
 
         // Show only jobs with 50%+ skill match
-        .filter(job => job.skillScore >= MIN_SKILL_SCORE)
+        .filter(job => job.skillScore >= MIN_SKILL_SCORE &&
+                        job.eligibility.experience.eligible )
 
         .sort((a, b) => {
 
