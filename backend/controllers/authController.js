@@ -41,12 +41,14 @@ export const googleLogin = async (req, res) => {
                 name,
                 email,
                 picture,
+                lastLoginAt: new Date(),
             });
 
         } else {
             user.name = name;
             user.picture = picture;
             user.googleId = sub;
+            user.lastLoginAt = new Date();
 
             await user.save();
         }

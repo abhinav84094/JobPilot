@@ -27,6 +27,11 @@ const userSchema = new mongoose.Schema(
       default: "",
     },
 
+    lastLoginAt: {
+      type: Date,
+      default: null,
+    },
+
     resume: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "Resume",

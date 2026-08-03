@@ -6,6 +6,7 @@ import cookieParser from "cookie-parser";
 import authRoutes from "./routes/authRoutes.js"
 import jobRoutes from "./routes/jobRoutes.js"
 import feedbackRoutes from "./routes/feedbackRoutes.js"
+import adminRoutes from "./routes/adminRoutes.js"
 import cors from "cors"
 import { startJobScraper } from "./cron/scrapeJobsCron.js";
 import { startCleanupCron } from "./cron/cleanupJobsCron.js";
@@ -38,6 +39,7 @@ app.use("/api/user", userRoutes);
 app.use("/api/auth", authRoutes);
 app.use("/api/jobs", jobRoutes)
 app.use("/api/feedback", feedbackRoutes)
+app.use("/api/admin", adminRoutes)
 
 app.get("/", (req, res)=>{
     res.send("this is home page")

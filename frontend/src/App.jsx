@@ -1,6 +1,8 @@
+import { Suspense, lazy } from "react";
 import { Routes, Route } from "react-router-dom";
 import Layout from "./components/Layout.jsx";
 import ProtectedRoute from "./components/ProtectedRoute.jsx";
+import AdminRoute from "./components/AdminRoute.jsx";
 import Dashboard from "./pages/Dashboard.jsx";
 import Login from "./pages/Login.jsx";
 import Resume from "./pages/Resume.jsx";
@@ -9,6 +11,8 @@ import Profile from "./pages/Profile.jsx";
 import Applications from "./pages/Applicatons.jsx";
 import AboutMatchora from "./pages/AboutMatchora.jsx";
 import Privacy from "./pages/Privacy.jsx";
+
+const AdminDashboard = lazy(() => import("./pages/AdminDashboard.jsx"));
 
 export default function App() {
   return (
@@ -31,6 +35,25 @@ export default function App() {
         <Route path="/applications" element={<Applications />} />
         {/* more routes get added here as we build each page */}
       </Route>
+
+      <Route
+        path="/admin"
+        element={
+          <ProtectedRoute>
+            <AdminRoute>
+              <Suspense
+                fallback={
+                  <div className="min-h-screen flex items-center justify-center text-sm text-neutral-400">
+                    Loading...
+                  </div>
+                }
+              >
+                <AdminDashboard />
+              </Suspense>
+            </AdminRoute>
+          </ProtectedRoute>
+        }
+      />
     </Routes>
   );
 }
