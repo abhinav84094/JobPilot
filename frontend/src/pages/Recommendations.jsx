@@ -85,11 +85,21 @@ export default function Recommendations() {
   const [jobs, setJobs] = useState([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
-  const [appliedKeys, setAppliedKeys] = useState(new Set());
   const hasFetched = useRef(false);
+
+  const PAGE_SIZE = 25;
+  const [page, setPage] = useState(1);
+  const [pagination, setPagination] = useState({
+    totalJobs: 0,
+    totalPages: 1,
+    hasNextPage: false,
+    hasPreviousPage: false,
+  });
 
   // Load existing applications once so we can mark already-applied jobs
   // as "Applied" even after a refresh, instead of re-fetching per card.
+  const appliedKeysRef = useRef(new Set());
+
   useEffect(() => {
     async function fetchApplications() {
       try {
@@ -98,9 +108,10 @@ export default function Recommendations() {
         });
         const data = await res.json();
         if (data.success) {
-          setAppliedKeys(
-            new Set(data.applications.map((a) => `${a.platform}:${a.jobId}`))
+          const keys = new Set(
+            data.applications.map((a) => `${a.platform}:${a.jobId}`)
           );
+          appliedKeysRef.current = keys;
         }
       } catch {
         // Non-fatal — cards will just default to "not applied" until clicked
@@ -110,11 +121,19 @@ export default function Recommendations() {
   }, []);
 
   const markApplied = (job) => {
-    setAppliedKeys((prev) => new Set(prev).add(jobKeyOf(job)));
+    appliedKeysRef.current = new Set(appliedKeysRef.current).add(jobKeyOf(job));
 
-    setJobs((prev) =>
-      prev.filter((j) => jobKeyOf(j) !== jobKeyOf(job))
-    );
+    setJobs((prev) => {
+      const next = prev.filter((j) => jobKeyOf(j) !== jobKeyOf(job));
+
+      // If removing this job emptied the current page and another page
+      // exists, move to it automatically instead of showing a dead end.
+      if (next.length === 0 && pagination.hasNextPage) {
+        setPage((p) => p + 1);
+      }
+
+      return next;
+    });
   };
 
   // Automatically drive the search from the resume — no manual query entry
@@ -122,6 +141,7 @@ export default function Recommendations() {
     if (resume?.preferredRoles?.length > 0 && !hasFetched.current) {
       hasFetched.current = true;
       setActiveRole(resume.preferredRoles[0]);
+      setPage(1);
     }
   }, [resume]);
 
@@ -131,15 +151,22 @@ export default function Recommendations() {
       setLoading(true);
       setError(null);
       try {
-        const res = await fetch(`${API_URL}/api/jobs/recommendations`, {
-          credentials: "include",
-        });
+        const res = await fetch(
+          `${API_URL}/api/jobs/recommendations?page=${page}&limit=${PAGE_SIZE}`,
+          { credentials: "include" }
+        );
         const data = await res.json();
         if (data.success) {
           const filteredJobs = data.jobs.filter(
-            (job) => !appliedKeys.has(jobKeyOf(job))
+            (job) => !appliedKeysRef.current.has(jobKeyOf(job))
           );
           setJobs(filteredJobs);
+          setPagination({
+            totalJobs: data.totalJobs,
+            totalPages: data.totalPages,
+            hasNextPage: data.hasNextPage,
+            hasPreviousPage: data.hasPreviousPage,
+          });
         } else {
           setError("Couldn't load jobs right now.");
           setJobs([]);
@@ -152,7 +179,10 @@ export default function Recommendations() {
       }
     }
     fetchJobs();
-  }, [activeRole,appliedKeys]);
+    // Intentionally NOT depending on appliedKeys — applying to a job
+    // updates local state only (see markApplied) and must not
+    // re-trigger a recommendations fetch.
+  }, [activeRole, page]);
 
 
 const handleApplied = async () => {
@@ -202,7 +232,7 @@ const handleNotYet = () => {
       <p className="text-sm text-neutral-500 mb-6">
         {loading
           ? "Finding jobs that match your resume..."
-          : `${jobs.length} jobs matched to your resume`}
+          : `${pagination.totalJobs} jobs matched to your resume`}
       </p>
 
       {/* Role chips — purely derived from the resume, not a free-text search */}
@@ -255,6 +285,30 @@ const handleNotYet = () => {
               }}
             />
           ))}
+        </div>
+      )}
+
+      {!loading && !error && jobs.length > 0 && pagination.totalPages > 1 && (
+        <div className="flex items-center justify-between mt-6">
+          <button
+            onClick={() => setPage((p) => Math.max(p - 1, 1))}
+            disabled={!pagination.hasPreviousPage}
+            className="text-sm font-medium px-4 py-2 rounded-lg border border-neutral-200 disabled:opacity-40 disabled:cursor-not-allowed hover:border-neutral-300"
+          >
+            Previous
+          </button>
+
+          <span className="text-xs text-neutral-400">
+            Page {page} of {pagination.totalPages}
+          </span>
+
+          <button
+            onClick={() => setPage((p) => p + 1)}
+            disabled={!pagination.hasNextPage}
+            className="text-sm font-medium px-4 py-2 rounded-lg border border-neutral-200 disabled:opacity-40 disabled:cursor-not-allowed hover:border-neutral-300"
+          >
+            Next
+          </button>
         </div>
       )}
 
