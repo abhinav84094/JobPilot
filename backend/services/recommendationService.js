@@ -254,7 +254,7 @@ export const calculateExperienceEligibility = (
 
 const MIN_SKILL_SCORE =  Number(process.env.MIN_SKILL_SCORE) || 50;
 
-export const recommendJobs = async (resume) => {
+export const recommendJobs = async (resume, { page = 1, limit = 25 } = {}) => {
 
     const jobs = await Job.find({
 
@@ -271,7 +271,7 @@ export const recommendJobs = async (resume) => {
     .limit(300)
     .lean();
 
-    return jobs
+    const scoredJobs = jobs
 
         .map(job => {
 
@@ -363,5 +363,11 @@ export const recommendJobs = async (resume) => {
             return new Date(b.postedDate) - new Date(a.postedDate);
 
         });
+
+    const totalJobs = scoredJobs.length;
+    const start = (page - 1) * limit;
+    const paginatedJobs = scoredJobs.slice(start, start + limit);
+
+    return { jobs: paginatedJobs, totalJobs };
 
 };

@@ -23,16 +23,33 @@ export const getRecommendations = async (req, res) => {
 
         }
 
-        const recommendations =
-            await recommendJobs(resume);
+        const page = Math.max(parseInt(req.query.page) || 1, 1);
+
+        // Cap limit at 100 to prevent an abusive/huge query from one request
+        const limit = Math.min(Math.max(parseInt(req.query.limit) || 25, 1), 100);
+
+        const { jobs, totalJobs } =
+            await recommendJobs(resume, { page, limit });
+
+        const totalPages = Math.max(Math.ceil(totalJobs / limit), 1);
 
         return res.status(200).json({
 
             success: true,
 
-            total: recommendations.length,
+            jobs,
 
-            jobs: recommendations,
+            page,
+
+            limit,
+
+            totalJobs,
+
+            totalPages,
+
+            hasNextPage: page < totalPages,
+
+            hasPreviousPage: page > 1,
 
         });
 
