@@ -321,8 +321,8 @@ export default function Dashboard() {
 
   return (
   <>
-    <main className="flex-1 px-10 py-8 max-w-4xl">
-      <div className="flex items-start justify-between mb-8">
+    <main className="flex-1 px-4 sm:px-6 lg:px-10 py-6 lg:py-8 w-full lg:max-w-4xl min-w-0">
+      <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-4 mb-6 lg:mb-8">
         <div>
           <p className="text-sm text-neutral-400 mb-1">
             {user
@@ -330,14 +330,14 @@ export default function Dashboard() {
               : "Welcome back"}
           </p>
 
-          <h1 className="text-2xl font-semibold leading-tight">
+          <h1 className="text-xl sm:text-2xl font-semibold leading-tight">
             Your next dream job
-            <br />
-            is closer than you think.
+            <br className="hidden sm:block" />
+            {" "}is closer than you think.
           </h1>
         </div>
 
-        <div className="flex items-center gap-3">
+        <div className="flex items-center gap-3 shrink-0">
           <button
             title="Notifications coming soon"
             disabled
@@ -354,11 +354,11 @@ export default function Dashboard() {
         </div>
       )}
 
-      <div className="grid grid-cols-3 gap-4 mb-10">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 mb-8 lg:mb-10">
         {statCards.map((item) => (
           <div
             key={item.label}
-            className="rounded-xl border border-neutral-100 p-4"
+            className="card p-4"
           >
             <div
               className={`w-8 h-8 rounded-lg flex items-center justify-center mb-3 ${item.tint}`}
@@ -366,9 +366,13 @@ export default function Dashboard() {
               <item.icon size={16} />
             </div>
 
-            <p className="text-2xl font-semibold">
-              {loading ? "--" : item.value}
-            </p>
+            {loading ? (
+              <div className="h-8 w-12 bg-neutral-100 rounded animate-pulse mb-1" />
+            ) : (
+              <p className="text-2xl font-semibold">
+                {item.value}
+              </p>
+            )}
 
             <p className="text-xs text-neutral-500 mt-1">
               {item.label}
@@ -455,13 +459,21 @@ export default function Dashboard() {
       )}
     </main>
 
-    <aside className="w-80 border-l border-neutral-100 px-6 py-8">
-      <div className="rounded-xl border border-neutral-100 p-5">
+    <aside className="w-full lg:w-80 border-t lg:border-t-0 lg:border-l border-neutral-100 px-4 sm:px-6 lg:px-6 py-6 lg:py-8">
+      <div className="card p-5">
         <p className="font-semibold mb-5">
           Resume Strength
         </p>
 
-        {resumeScore == null ? (
+        {loading ? (
+          <div className="flex items-center gap-4 animate-pulse">
+            <div className="w-[60px] h-[60px] rounded-full bg-neutral-100 shrink-0" />
+            <div className="flex-1">
+              <div className="h-4 w-24 bg-neutral-100 rounded mb-2" />
+              <div className="h-3 w-28 bg-neutral-100 rounded" />
+            </div>
+          </div>
+        ) : resumeScore == null ? (
           <>
             <p className="text-sm text-neutral-500">
               No resume uploaded yet.
@@ -515,7 +527,7 @@ export default function Dashboard() {
         )}
       </div>
 
-      <div className="rounded-xl border border-neutral-100 p-5 mt-5 space-y-3">
+      <div className="card p-5 mt-5 space-y-3">
         <button
           onClick={() => setShowFeedbackModal(true)}
           className="w-full flex items-center justify-center gap-2 border border-neutral-200 rounded-lg py-2.5 text-sm font-medium hover:border-neutral-300 hover:bg-neutral-50 transition"
@@ -537,8 +549,8 @@ export default function Dashboard() {
     </aside>
 
     {showConfirmModal && (
-      <div className="fixed inset-0 bg-black/40 flex items-center justify-center z-50">
-        <div className="bg-white rounded-xl w-[420px] p-6 shadow-xl">
+      <div className="fixed inset-0 bg-black/40 flex items-center justify-center z-50 px-4">
+        <div className="bg-white rounded-xl w-full max-w-[420px] p-6 shadow-xl">
           <h2 className="text-xl font-semibold">
             Did you submit your application?
           </h2>
