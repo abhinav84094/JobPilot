@@ -4,12 +4,15 @@ import { scrapeLinkedInJobs } from "../services/scrapers/linkedInScraper.js";
 import { closeBrowser } from "../services/browser.js";
 
 const JOB_ROLES = [
-    "C#", "Java", "Python", "MERN", "JavaScript", 
+    "GenAI", "C#", "Java", "Python", "MERN", "JavaScript", 
     "MS-Office", "recent", "Intern", 
     "Software Engineer Intern",
     "Frontend Intern",
     "Backend Intern",
     "Full Stack Intern",
+    "DevOps",
+    "Data Science",
+
 
     "Fresher Backend Developer",
 
@@ -28,6 +31,10 @@ const JOB_ROLES = [
     "Fresher Python Developer",
 
     "Fresher Software Engineer",
+
+
+
+
 
     // "Backend Developer",
 
