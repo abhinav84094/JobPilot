@@ -4,6 +4,10 @@ import generateToken from "../utils/generateToken.js";
 
 const client = new OAuth2Client(process.env.GOOGLE_CLIENT_ID);
 
+const isProduction = process.env.NODE_ENV === "production";
+
+
+
 export const googleLogin = async (req, res) => {
     try {
 
@@ -57,12 +61,13 @@ export const googleLogin = async (req, res) => {
         const jwtToken = generateToken(user);
 
         // Store in cookie
+
         res.cookie("token", jwtToken, {
             httpOnly: true,
-            secure: true,
-            sameSite: "None",
+            secure: isProduction,
+            sameSite: isProduction ? "None" : "Lax",
             maxAge: 7 * 24 * 60 * 60 * 1000,
-            });
+        });
 
         res.status(200).json({
             success: true,
@@ -99,8 +104,8 @@ export const logout = (req, res) => {
 
     res.clearCookie("token", {
         httpOnly: true,
-        sameSite: "lax",
-        secure: false,
+        secure: isProduction,
+        sameSite: isProduction ? "None" : "Lax",
     });
 
     res.status(200).json({

@@ -561,5 +561,434 @@ export const SKILL_ALIASES = {
     DigitalOcean: [
         "digitalocean",
         "digital ocean"
+    ],
+
+    TensorFlow: [
+        "tensorflow",
+        "tensor flow",
+        "tf"
+    ],
+
+    PyTorch: [
+        "pytorch",
+        "torch"
+    ],
+
+    ScikitLearn: [
+        "scikit-learn",
+        "scikit learn",
+        "sklearn"
+    ],
+
+    Pandas: [
+        "pandas"
+    ],
+
+    NumPy: [
+        "numpy",
+        "np"
+    ],
+
+    SciPy: [
+        "scipy",
+        "sci py"
+    ],
+
+    Matplotlib: [
+        "matplotlib",
+        "plt"
+    ],
+
+    Seaborn: [
+        "seaborn"
+    ],
+
+    Jupyter: [
+        "jupyter",
+        "jupyter notebook",
+        "jupyterlab"
+    ],
+
+    Anaconda: [
+        "anaconda"
+    ],
+
+    OpenCV: [
+        "opencv",
+        "cv2"
+    ],
+
+    Keras: [
+        "keras"
+    ],
+
+    XGBoost: [
+        "xgboost"
+    ],
+
+    LightGBM: [
+        "lightgbm",
+        "light gbm"
+    ],
+
+    CatBoost: [
+        "catboost",
+        "cat boost"
+    ],
+
+    MLflow: [
+        "mlflow",
+        "ml flow"
+    ],
+
+    Airflow: [
+        "apache airflow",
+        "airflow"
+    ],
+
+    Spark: [
+        "apache spark",
+        "spark",
+        "pyspark"
+    ],
+
+    Hadoop: [
+        "apache hadoop",
+        "hadoop"
+    ],
+
+    Hive: [
+        "apache hive",
+        "hive"
+    ],
+
+    Databricks: [
+        "databricks"
+    ],
+
+    SQLServer: [
+        "sql server",
+        "microsoft sql server",
+        "ms sql server"
+    ],
+
+    OracleDB: [
+        "oracle",
+        "oracle database",
+        "oracle db"
+    ],
+
+    SQLite: [
+        "sqlite",
+        "sqlite3"
+    ],
+
+    BigQuery: [
+        "bigquery",
+        "big query"
+    ],
+
+    Redshift: [
+        "amazon redshift",
+        "redshift"
+    ],
+
+    Snowpark: [
+        "snowpark"
+    ],
+
+    ETL: [
+        "etl",
+        "extract transform load"
+    ],
+
+    DataWarehouse: [
+        "data warehouse",
+        "data warehousing",
+        "dwh"
+    ],
+
+    MachineLearning: [
+        "machine learning",
+        "ml"
+    ],
+
+    DeepLearning: [
+        "deep learning",
+        "dl"
+    ],
+
+    ComputerVision: [
+        "computer vision"
+    ],
+
+    NLP: [
+        "nlp",
+        "natural language processing"
+    ],
+
+    MLOps: [
+        "mlops",
+        "ml ops"
+    ],
+
+    Statistics: [
+        "statistics",
+        "statistical analysis"
+    ],
+
+    DataAnalysis: [
+        "data analysis",
+        "data analytics"
+    ],
+
+    FeatureEngineering: [
+        "feature engineering"
+    ],
+
+    ModelDeployment: [
+        "model deployment",
+        "model serving"
+    ],
+
+    Bash: [
+        "bash",
+        "bash scripting",
+        "shell scripting"
+    ],
+
+    Shell: [
+        "shell",
+        "unix shell"
+    ],
+
+    Terraform: [
+        "terraform"
+    ],
+
+    Ansible: [
+        "ansible"
+    ],
+
+    Helm: [
+        "helm",
+        "helm charts"
+    ],
+
+    ArgoCD: [
+        "argocd",
+        "argo cd"
+    ],
+
+    Istio: [
+        "istio"
+    ],
+
+    Vault: [
+        "hashicorp vault",
+        "vault"
+    ],
+
+    Consul: [
+        "consul",
+        "hashicorp consul"
+    ],
+
+    Packer: [
+        "packer",
+        "hashicorp packer"
+    ],
+
+    Pulumi: [
+        "pulumi"
+    ],
+
+    GitHubActions: [
+        "github actions",
+        "github workflows"
+    ],
+
+    GitLabCI: [
+        "gitlab ci",
+        "gitlab pipeline",
+        "gitlab ci/cd"
+    ],
+
+    CircleCI: [
+        "circleci",
+        "circle ci"
+    ],
+
+    TravisCI: [
+        "travis ci",
+        "travisci"
+    ],
+
+    AzureDevOps: [
+        "azure devops",
+        "azure pipelines"
+    ],
+
+    EKS: [
+        "eks",
+        "amazon eks",
+        "elastic kubernetes service"
+    ],
+
+    AKS: [
+        "aks",
+        "azure kubernetes service"
+    ],
+
+    GKE: [
+        "gke",
+        "google kubernetes engine"
+    ],
+
+    TerraformCloud: [
+        "terraform cloud"
+    ],
+
+    ELK: [
+        "elk",
+        "elk stack"
+    ],
+
+    Loki: [
+        "loki",
+        "grafana loki"
+    ],
+
+    Jaeger: [
+        "jaeger"
+    ],
+
+    OpenTelemetry: [
+        "opentelemetry",
+        "open telemetry",
+        "otel"
+    ],
+
+    GenAI: [
+        "genai",
+        "generative ai",
+        "generative artificial intelligence"
+    ],
+
+    LLM: [
+        "llm",
+        "large language model",
+        "large language models"
+    ],
+
+    PromptEngineering: [
+        "prompt engineering",
+        "prompt design"
+    ],
+
+    RAG: [
+        "rag",
+        "retrieval augmented generation"
+    ],
+
+    LangChain: [
+        "langchain",
+        "lang chain"
+    ],
+
+    LlamaIndex: [
+        "llamaindex",
+        "llama index"
+    ],
+
+    HuggingFace: [
+        "hugging face",
+        "huggingface"
+    ],
+
+    Transformers: [
+        "transformers",
+        "huggingface transformers"
+    ],
+
+    OpenAI: [
+        "openai",
+        "chatgpt",
+        "gpt",
+        "gpt-4",
+        "gpt-5"
+    ],
+
+    Claude: [
+        "claude",
+        "anthropic"
+    ],
+
+    Gemini: [
+        "gemini",
+        "google gemini"
+    ],
+
+    Llama: [
+        "llama",
+        "llama2",
+        "llama 2",
+        "llama3",
+        "llama 3"
+    ],
+
+    Mistral: [
+        "mistral",
+        "mistral ai"
+    ],
+
+    Ollama: [
+        "ollama"
+    ],
+
+    vLLM: [
+        "vllm"
+    ],
+
+    LangGraph: [
+        "langgraph",
+        "lang graph"
+    ],
+
+    VectorDatabase: [
+        "vector database",
+        "vector db"
+    ],
+
+    Pinecone: [
+        "pinecone"
+    ],
+
+    Weaviate: [
+        "weaviate"
+    ],
+
+    ChromaDB: [
+        "chromadb",
+        "chroma db"
+    ],
+
+    FAISS: [
+        "faiss"
+    ],
+
+    Milvus: [
+        "milvus"
+    ],
+
+    AIAgents: [
+        "ai agent",
+        "ai agents",
+        "autonomous agents"
+    ],
+
+    MCP: [
+        "model context protocol",
+        "mcp"
     ]
 };

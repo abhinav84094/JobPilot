@@ -9,7 +9,7 @@ import { useAuth } from "../hooks/useAuth";
 
 const navItems = [
   { to: "/dashboard", icon: Home, label: "Dashboard" },
-  { to: "/recommendations", icon: Search, label: "Recommendations" },
+  { to: "/recommendations", icon: Search, label: "Jobs" },
   { to: "/applications", icon: ClipboardList, label: "Applications" },
   { to: "/resume", icon: FileText, label: "Resume" },
   { to: "/profile", icon: User, label: "Profile" },

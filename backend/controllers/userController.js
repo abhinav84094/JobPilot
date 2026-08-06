@@ -32,7 +32,7 @@ export const uploadResume = async (req, res) => {
         ) {
             return res.status(429).json({
                 success: false,
-                message: "You can upload another resume after 1 hour.",
+                message: "You can upload another resume after 1 day.",
                 nextUploadAt: existingResume.nextUploadAt,
             });
         }
@@ -76,7 +76,7 @@ export const uploadResume = async (req, res) => {
                 uploadedAt: new Date(),
 
                 nextUploadAt : new Date(
-                    Date.now() + 60 * 60 * 1000
+                    Date.now() + 24 * 60 * 60 * 1000
                 )
             },
             {

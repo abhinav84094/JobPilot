@@ -72,7 +72,7 @@ export default function JobCard({
           rel="noopener noreferrer"
           className="flex items-center gap-1.5 text-sm font-medium bg-violet-600 hover:bg-violet-700 text-white rounded-lg px-4 py-2 transition-colors focus-ring whitespace-nowrap"
         >
-          Apply job <ExternalLink size={13} />
+          Apply On Linkedin <ExternalLink size={13} />
         </button>
       </div>
 

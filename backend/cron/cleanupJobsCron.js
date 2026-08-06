@@ -1,7 +1,7 @@
 import cron from "node-cron";
 import Job from "../models/Job.js";
 
-const ACTIVE_DAYS = 10;
+const ACTIVE_DAYS = 4;
 const DELETE_AFTER_EXPIRED_DAYS = 30;
 
 /**
@@ -15,10 +15,10 @@ const expireOldJobs = async () => {
 
     try {
 
-        const tenDaysAgo = new Date();
+        const DaysAgo = new Date();
 
-        tenDaysAgo.setDate(
-            tenDaysAgo.getDate() - ACTIVE_DAYS
+        DaysAgo.setDate(
+            DaysAgo.getDate() - ACTIVE_DAYS
         );
 
         const result = await Job.updateMany(
@@ -27,7 +27,7 @@ const expireOldJobs = async () => {
                 status: "active",
 
                 postedDate: {
-                    $lt: tenDaysAgo,
+                    $lt: DaysAgo,
                 },
 
             },
@@ -119,11 +119,11 @@ export const startCleanupCron = () => {
 
     /**
      * Every day at 2:00 AM
-     * Expire jobs older than 10 days
+     * Expire jobs older than 4 days
      */
     cron.schedule(
 
-        "0 8 * * *",
+        "4 12 * * *",
 
         async () => {
 
