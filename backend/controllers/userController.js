@@ -46,7 +46,16 @@ export const uploadResume = async (req, res) => {
 
         const buffer = fs.readFileSync(req.file.path);
 
-        const data = await pdf(buffer);
+        let data;
+        try {
+            data = await pdf(buffer);
+        } catch (parseErr) {
+            console.error("PDF parse error:", parseErr);
+            return res.status(400).json({
+                success: false,
+                message: "We couldn't read that PDF. It may be corrupted, empty, or password-protected — please try a different file.",
+            });
+        }
 
         const analysis = await analyzeResume(data.text);
 
