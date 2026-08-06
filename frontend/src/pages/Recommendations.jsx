@@ -228,7 +228,7 @@ const handleNotYet = () => {
 };
 
   return (
-    <main className="flex-1 px-10 py-8 max-w-3xl">
+    <main className="flex-1 px-4 sm:px-6 lg:px-10 py-6 lg:py-8 w-full lg:max-w-3xl min-w-0">
       <p className="text-sm text-neutral-500 mb-6">
         {loading
           ? "Finding jobs that match your resume..."
@@ -289,11 +289,11 @@ const handleNotYet = () => {
       )}
 
       {!loading && !error && jobs.length > 0 && pagination.totalPages > 1 && (
-        <div className="flex items-center justify-between mt-6">
+        <div className="flex flex-wrap items-center justify-between gap-3 mt-6">
           <button
             onClick={() => setPage((p) => Math.max(p - 1, 1))}
             disabled={!pagination.hasPreviousPage}
-            className="text-sm font-medium px-4 py-2 rounded-lg border border-neutral-200 disabled:opacity-40 disabled:cursor-not-allowed hover:border-neutral-300"
+            className="text-sm font-medium px-4 py-2 rounded-lg border border-neutral-200 disabled:opacity-40 disabled:cursor-not-allowed hover:border-neutral-300 focus-ring"
           >
             Previous
           </button>
@@ -305,7 +305,7 @@ const handleNotYet = () => {
           <button
             onClick={() => setPage((p) => p + 1)}
             disabled={!pagination.hasNextPage}
-            className="text-sm font-medium px-4 py-2 rounded-lg border border-neutral-200 disabled:opacity-40 disabled:cursor-not-allowed hover:border-neutral-300"
+            className="text-sm font-medium px-4 py-2 rounded-lg border border-neutral-200 disabled:opacity-40 disabled:cursor-not-allowed hover:border-neutral-300 focus-ring"
           >
             Next
           </button>
@@ -314,8 +314,8 @@ const handleNotYet = () => {
 
 
       {showConfirmModal && (
-  <div className="fixed inset-0 bg-black/40 flex items-center justify-center z-50">
-    <div className="bg-white rounded-xl w-[420px] p-6 shadow-xl">
+  <div className="fixed inset-0 bg-black/40 flex items-center justify-center z-50 px-4">
+    <div className="bg-white rounded-xl w-full max-w-[420px] p-6 shadow-xl">
 
       <h2 className="text-xl font-semibold">
         Did you submit your application?

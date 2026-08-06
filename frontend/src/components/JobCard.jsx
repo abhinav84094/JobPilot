@@ -1,6 +1,6 @@
 import ScoreRing from "./ScoreRing";
 import { useState } from "react";
-import { MapPin, ChevronDown, ExternalLink, Sparkles } from "lucide-react";
+import { MapPin, ChevronDown, ExternalLink } from "lucide-react";
 
 
 /* ---------------- Company avatar color ---------------- */
@@ -33,8 +33,8 @@ export default function JobCard({
 };
 
   return (
-    <div className="rounded-xl border border-neutral-200 hover:border-neutral-300 transition-colors p-5">
-      <div className="flex items-start gap-4">
+    <div className="card card-hover p-4 sm:p-5">
+      <div className="flex items-start gap-3 sm:gap-4">
         <div
           className="w-10 h-10 shrink-0 rounded-lg flex items-center justify-center text-white font-medium text-sm"
           style={{ background: companyColor(job.company) }}
@@ -47,7 +47,7 @@ export default function JobCard({
           <p className="text-sm text-neutral-500 mt-0.5">{job.company}</p>
           <div className="flex items-center gap-1 text-xs text-neutral-400 mt-1">
             <MapPin size={12} />
-            <span>{job.location}</span>
+            <span className="truncate">{job.location}</span>
           </div>
         </div>
 
@@ -61,8 +61,8 @@ export default function JobCard({
         </div>
       </div>
 
-      <div className="flex items-center justify-between mt-4 pt-4 border-t border-neutral-100">
-        <button onClick={() => setOpen(!open)} className="flex items-center gap-1 text-xs text-neutral-500 hover:text-neutral-700">
+      <div className="flex flex-wrap items-center justify-between gap-3 mt-4 pt-4 border-t border-neutral-100">
+        <button onClick={() => setOpen(!open)} className="flex items-center gap-1 text-xs text-neutral-500 hover:text-neutral-700 focus-ring rounded whitespace-nowrap">
           Skills match ({job.matchedSkills?.length || 0}/{job.requiredSkills?.length || 0})
           <ChevronDown size={14} className={`transition-transform ${open ? "rotate-180" : ""}`} />
         </button>
@@ -70,7 +70,7 @@ export default function JobCard({
           onClick={handleApply}
           target="_blank"
           rel="noopener noreferrer"
-          className="flex items-center gap-1.5 text-sm font-medium bg-violet-600 hover:bg-violet-700 text-white rounded-lg px-4 py-2 transition-colors"
+          className="flex items-center gap-1.5 text-sm font-medium bg-violet-600 hover:bg-violet-700 text-white rounded-lg px-4 py-2 transition-colors focus-ring whitespace-nowrap"
         >
           Apply job <ExternalLink size={13} />
         </button>
