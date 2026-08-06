@@ -5,3 +5,38 @@
 body {
   font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
 }
+
+/* ---------------------------------------------------------------
+   Design system — Phase 1 (foundation)
+
+   Semantic classes below give every page a single source of truth
+   for typography, card surfaces, and focus states. They are purely
+   additive: nothing existing was removed or renamed, so no current
+   page breaks by not using them yet. Adoption happens page-by-page
+   in later phases.
+------------------------------------------------------------------ */
+@layer components {
+  /* Typography scale */
+  .text-display   { @apply text-4xl font-extrabold tracking-tight leading-[1.1]; }
+  .text-heading   { @apply text-2xl font-bold tracking-tight; }
+  .text-subheading{ @apply text-lg font-semibold; }
+  .text-body      { @apply text-sm text-neutral-600 leading-relaxed; }
+  .text-small     { @apply text-xs text-neutral-500; }
+  .text-caption   { @apply text-[11px] text-neutral-400 uppercase tracking-wide; }
+
+  /* Card surface — the standard container for KPI cards, list items,
+     panels, etc. Pins radius + border + shadow to one consistent look
+     instead of the previous rounded-lg/rounded-xl/shadow-lg/shadow-xl mix. */
+  .card {
+    @apply bg-white rounded-card border border-neutral-100 shadow-card;
+  }
+
+  .card-hover {
+    @apply transition-shadow duration-base ease-out hover:shadow-elevated;
+  }
+
+  /* Consistent, visible keyboard focus state for any interactive element */
+  .focus-ring {
+    @apply outline-none focus-visible:ring-2 focus-visible:ring-violet-500 focus-visible:ring-offset-2 focus-visible:ring-offset-white;
+  }
+}
