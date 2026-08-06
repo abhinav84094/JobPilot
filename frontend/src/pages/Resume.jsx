@@ -155,7 +155,7 @@ function UploadZone({ onUploaded }) {
 
   return (
     <div
-      className="border-2 border-dashed border-neutral-200 rounded-2xl p-10 text-center"
+      className="border-2 border-dashed border-neutral-200 rounded-2xl p-6 sm:p-10 text-center"
       onDragOver={(e) => e.preventDefault()}
       onDrop={(e) => {
         e.preventDefault();
@@ -238,16 +238,14 @@ function UploadZone({ onUploaded }) {
   const { resume, loading, setResume } = useResume();
 
   const [uploading, setUploading] = useState(false);
-  const [nextUploadAt, setNextUploadAt] = useState(
-    resume?.nextUploadAt || null
-  );
+  // Local override for a fresh 429 response from reUpload(); when absent,
+  // resume.nextUploadAt (loaded with the resume itself) is authoritative.
+  // No separate sync effect needed, which avoids a setState-in-effect
+  // cascade every time `resume` changes.
+  const [localNextUploadAt, setLocalNextUploadAt] = useState(null);
+  const nextUploadAt = localNextUploadAt || resume?.nextUploadAt || null;
   const [remainingTime, setRemainingTime] = useState("");
   const [error, setError] = useState("");
-
-  useEffect(() => {
-    if (!resume?.nextUploadAt) return;
-    setNextUploadAt(resume.nextUploadAt);
-  }, [resume]);
 
   useEffect(() => {
     if (!nextUploadAt) return;
@@ -258,7 +256,7 @@ function UploadZone({ onUploaded }) {
 
       if (diff <= 0) {
         clearInterval(timer);
-        setNextUploadAt(null);
+        setLocalNextUploadAt(null);
         setRemainingTime("");
         return;
       }
@@ -312,7 +310,7 @@ function UploadZone({ onUploaded }) {
       setError(data.message);
 
       if (res.status === 429) {
-        setNextUploadAt(data.nextUploadAt);
+        setLocalNextUploadAt(data.nextUploadAt);
       }
     } catch (err) {
       console.error(err);
@@ -324,7 +322,7 @@ function UploadZone({ onUploaded }) {
 
   if (loading) {
     return (
-      <main className="flex-1 px-10 py-8 max-w-3xl flex items-center gap-2 text-neutral-400 text-sm">
+      <main className="flex-1 px-4 sm:px-6 lg:px-10 py-6 lg:py-8 w-full lg:max-w-3xl min-w-0 flex items-center gap-2 text-neutral-400 text-sm">
         <Loader2 size={16} className="animate-spin" />
         Loading your resume...
       </main>
@@ -333,8 +331,8 @@ function UploadZone({ onUploaded }) {
 
   if (!resume) {
     return (
-      <main className="flex-1 px-10 py-8 max-w-2xl">
-        <h1 className="text-2xl font-semibold mb-2">
+      <main className="flex-1 px-4 sm:px-6 lg:px-10 py-6 lg:py-8 w-full lg:max-w-2xl min-w-0">
+        <h1 className="text-xl sm:text-2xl font-semibold mb-2">
           Resume
         </h1>
 
@@ -365,23 +363,21 @@ function UploadZone({ onUploaded }) {
       : "text-red-600";
 
   return (
-    <main className="flex-1 px-10 py-8 max-w-3xl">
-      <div className="flex items-center justify-between mb-8">
-        <div>
-          <h1 className="text-2xl font-semibold">
-            Resume
-          </h1>
+    <main className="flex-1 px-4 sm:px-6 lg:px-10 py-6 lg:py-8 w-full lg:max-w-3xl min-w-0">
+      <div className="mb-6 lg:mb-8">
+        <h1 className="text-xl sm:text-2xl font-semibold">
+          Resume
+        </h1>
 
-          <p className="text-sm text-neutral-500 mt-1">
-            {resume.fileName}
-          </p>
-        </div>
+        <p className="text-sm text-neutral-500 mt-1 truncate">
+          {resume.fileName}
+        </p>
       </div>
 
-      <div className="rounded-xl border border-neutral-100 p-6 flex items-center gap-6 mb-6">
+      <div className="card p-5 sm:p-6 flex flex-col sm:flex-row items-center gap-4 sm:gap-6 mb-6 text-center sm:text-left">
         <ScoreRing score={atsScore} />
 
-        <div className="flex-1">
+        <div className="flex-1 min-w-0">
           <p
             className={`text-sm font-medium ${scoreColor}`}
           >
@@ -409,7 +405,7 @@ function UploadZone({ onUploaded }) {
         </div>
 
         <label
-          className={`text-xs font-medium rounded-lg px-4 py-2 transition
+          className={`text-xs font-medium rounded-lg px-4 py-2 transition shrink-0 focus-ring
           ${
             nextUploadAt
               ? "bg-neutral-300 text-neutral-600 cursor-not-allowed"
@@ -438,8 +434,8 @@ function UploadZone({ onUploaded }) {
 
       {/* Skills */}
 
-      <div className="grid grid-cols-2 gap-4 mb-6">
-        <div className="rounded-xl border border-neutral-100 p-5">
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-6">
+        <div className="card p-5">
           <div className="flex items-center gap-2 mb-3">
             <CheckCircle2
               size={16}
@@ -464,7 +460,7 @@ function UploadZone({ onUploaded }) {
           </div>
         </div>
 
-        <div className="rounded-xl border border-neutral-100 p-5">
+        <div className="card p-5">
           <div className="flex items-center gap-2 mb-3">
             <AlertTriangle
               size={16}
@@ -495,7 +491,7 @@ function UploadZone({ onUploaded }) {
       {/* Strengths */}
 
       {resume.strengths?.length > 0 && (
-        <div className="rounded-xl border border-neutral-100 p-5 mb-6">
+        <div className="card p-5 mb-6">
           <p className="text-sm font-medium mb-3">
             Strengths
           </p>
@@ -508,7 +504,7 @@ function UploadZone({ onUploaded }) {
               >
                 <CheckCircle2
                   size={14}
-                  className="text-emerald-600 mt-0.5"
+                  className="text-emerald-600 mt-0.5 shrink-0"
                 />
 
                 {item}
@@ -521,7 +517,7 @@ function UploadZone({ onUploaded }) {
       {/* Suggestions */}
 
       {resume.suggestions?.length > 0 && (
-        <div className="rounded-xl border border-neutral-100 p-5 mb-6">
+        <div className="card p-5 mb-6">
           <div className="flex items-center gap-2 mb-3">
             <Lightbulb
               size={16}
@@ -549,7 +545,7 @@ function UploadZone({ onUploaded }) {
       )}      {/* Experience */}
 
       {resume.experience?.length > 0 && (
-        <div className="rounded-xl border border-neutral-100 p-5 mb-6">
+        <div className="card p-5 mb-6">
           <div className="flex items-center gap-2 mb-4">
             <Briefcase
               size={16}
@@ -601,7 +597,7 @@ function UploadZone({ onUploaded }) {
       {/* Projects */}
 
       {resume.projects?.length > 0 && (
-        <div className="rounded-xl border border-neutral-100 p-5 mb-6">
+        <div className="card p-5 mb-6">
           <div className="flex items-center gap-2 mb-4">
             <FolderGit2
               size={16}
@@ -650,7 +646,7 @@ function UploadZone({ onUploaded }) {
       {/* Education */}
 
       {resume.education?.length > 0 && (
-        <div className="rounded-xl border border-neutral-100 p-5">
+        <div className="card p-5">
           <div className="flex items-center gap-2 mb-4">
             <GraduationCap
               size={16}
