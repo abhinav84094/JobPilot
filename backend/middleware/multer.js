@@ -20,8 +20,30 @@ const storage = multer.diskStorage({
     }
 });
 
+// pdf-parse is the only parser wired up right now, so only PDF can
+// actually be processed end-to-end. .doc/.docx are rejected here
+// (rather than accepted and then crashing later in pdf-parse) until
+// a Word-doc parser (e.g. mammoth) is added.
+const ALLOWED_MIME_TYPES = [
+    "application/pdf",
+];
+
+const fileFilter = (req, file, cb) => {
+    if (ALLOWED_MIME_TYPES.includes(file.mimetype)) {
+        return cb(null, true);
+    }
+
+    // Rejecting here (rather than throwing) lets the route handler
+    // respond with a clean 400 instead of a generic 500 crash.
+    cb(new Error("INVALID_FILE_TYPE"));
+};
+
 const upload = multer({
-    storage
+    storage,
+    fileFilter,
+    limits: {
+        fileSize: 5 * 1024 * 1024, // 5 MB, matches what the UI already advertises
+    },
 });
 
 export default upload;

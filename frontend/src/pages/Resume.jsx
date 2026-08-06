@@ -13,6 +13,22 @@ import {
 
 const API_URL = import.meta.env.VITE_API_URL;
 
+const MAX_FILE_SIZE = 5 * 1024 * 1024; // 5 MB
+
+function validateResumeFile(file) {
+  if (!file) return "Please choose a file.";
+
+  if (file.type !== "application/pdf") {
+    return "Please upload a PDF file (.doc/.docx support is coming soon).";
+  }
+
+  if (file.size > MAX_FILE_SIZE) {
+    return "That file is too large. Please upload a file under 5 MB.";
+  }
+
+  return null;
+}
+
 function ScoreRing({ score = 0, size = 72 }) {
   const stroke = 6;
   const r = (size - stroke) / 2;
@@ -109,6 +125,12 @@ function UploadZone({ onUploaded }) {
   async function handleFile(file) {
     if (!file) return;
 
+    const validationError = validateResumeFile(file);
+    if (validationError) {
+      setError(validationError);
+      return;
+    }
+
     setUploading(true);
     setError("");
 
@@ -179,7 +201,7 @@ function UploadZone({ onUploaded }) {
       </p>
 
       <p className="text-xs text-neutral-400 mt-1">
-        PDF or DOCX • Max 5 MB
+        PDF only • Max 5 MB
       </p>
 
       {error && (
@@ -204,7 +226,7 @@ function UploadZone({ onUploaded }) {
 
         <input
           type="file"
-          accept=".pdf,.doc,.docx"
+          accept=".pdf"
           className="hidden"
           disabled={
             uploading || !!nextUploadAt
@@ -283,6 +305,12 @@ function UploadZone({ onUploaded }) {
 
   async function reUpload(file) {
     if (!file) return;
+
+    const validationError = validateResumeFile(file);
+    if (validationError) {
+      setError(validationError);
+      return;
+    }
 
     setUploading(true);
     setError("");
@@ -421,7 +449,7 @@ function UploadZone({ onUploaded }) {
           <input
             type="file"
             className="hidden"
-            accept=".pdf,.doc,.docx"
+            accept=".pdf"
             disabled={
               uploading || !!nextUploadAt
             }
