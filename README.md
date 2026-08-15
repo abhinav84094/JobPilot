@@ -1,6 +1,6 @@
 # Matchora
 
-Matchora is an AI-powered career assistant that helps job seekers analyze resumes, discover relevant jobs, identify missing skills, track applications, and receive personalized job recommendations using Google Gemini AI and intelligent matching algorithms.
+Matchora is an AI-powered career assistant that helps job seekers analyze resumes, discover relevant jobs, identify missing skills, track applications, and receive personalized job recommendations [...]
 
 ## Table of Contents
 
@@ -110,8 +110,8 @@ The platform currently supports job aggregation from LinkedIn with planned expan
 
 1. Clone the repository:
 ```bash
-git clone https://github.com/abhinav84094/JobPilot.git
-cd JobPilot
+git clone https://github.com/abhinav84094/Matchora.git
+cd Matchora
 ```
 
 2. Backend configuration:
@@ -123,7 +123,7 @@ npm install
 Create a `.env` file in the backend directory:
 ```
 PORT=5000
-MONGO_URL=mongodb+srv://username:password@cluster.mongodb.net/jobpilot
+MONGO_URL=mongodb+srv://username:password@cluster.mongodb.net/matchora
 JWT_SECRET=your_secure_jwt_secret_key_here
 GOOGLE_CLIENT_ID=your_google_client_id.apps.googleusercontent.com
 GOOGLE_CLIENT_SECRET=your_google_client_secret
@@ -240,7 +240,7 @@ frontend/
 ├── index.html                    # HTML template
 ├── vite.config.js                # Vite configuration
 ├── tailwind.config.js            # Tailwind CSS configuration
-└── package.json                  # Dependencies and scripts
+└── package.json                   # Dependencies and scripts
 ```
 
 ## Architecture
@@ -325,7 +325,7 @@ Return Ranked Jobs with Detailed Matching Info
 | Variable | Description | Example | Required |
 |----------|-------------|---------|----------|
 | `PORT` | Express server listening port | `5000` | Yes |
-| `MONGO_URL` | MongoDB connection URI | `mongodb+srv://user:pass@cluster.mongodb.net/jobpilot` | Yes |
+| `MONGO_URL` | MongoDB connection URI | `mongodb+srv://user:pass@cluster.mongodb.net/matchora` | Yes |
 | `JWT_SECRET` | Secret key for JWT signing and verification | `your_secure_random_string` | Yes |
 | `GOOGLE_CLIENT_ID` | OAuth 2.0 Client ID from Google Cloud | `xxxxx.apps.googleusercontent.com` | Yes |
 | `GOOGLE_CLIENT_SECRET` | OAuth 2.0 Client Secret from Google Cloud | `GOCSPX_...` | Yes |
@@ -650,7 +650,7 @@ Stores parsed resume data and Gemini AI analysis results.
     company: String,              // Company name
     location: String,             // Work location
     startDate: String,            // Start month/year
-    endDate: String,              // End month/year or "Present"
+    endDate: String,              // End month/year or "Present",
     duration: String,             // Calculated duration
     description: [String]         // Responsibilities and achievements
   }],
@@ -908,7 +908,7 @@ npm test
 
 1. Create Heroku account and install CLI
 2. Login: `heroku login`
-3. Create app: `heroku create jobpilot-app`
+3. Create app: `heroku create matchora-app`
 4. Set environment variables:
 ```bash
 heroku config:set PORT=5000
@@ -998,8 +998,4 @@ For issues and questions, please open an issue on the GitHub repository.
 
 ## License
 
-This project is licensed under the ISC License. See the LICENSE file for details.
-
----
-
-**Last Updated:** July 2026
+[...]
