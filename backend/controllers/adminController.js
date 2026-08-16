@@ -28,7 +28,7 @@ export const getKPIs = async (req, res) => {
     ] = await Promise.all([
       User.countDocuments(),
       User.countDocuments({ lastLoginAt: { $gte: thirtyDaysAgo } }),
-      Job.countDocuments(),
+      Job.countDocuments({ status: "active" }),
       Application.countDocuments(),
       Resume.countDocuments(),
     ]);

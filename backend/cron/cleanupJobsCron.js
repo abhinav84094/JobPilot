@@ -123,7 +123,7 @@ export const startCleanupCron = () => {
      */
     cron.schedule(
 
-        "4 12 * * *",
+        "30 20 * * *",
 
         async () => {
 
