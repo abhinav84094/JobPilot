@@ -38,8 +38,6 @@ export const uploadResume = async (req, res) => {
         }
         
 
-        console.log("req.file:", req.file);
-
         if (!fs.existsSync(req.file.path)) {
             throw new Error(`File not found: ${req.file.path}`);
         }
@@ -49,8 +47,6 @@ export const uploadResume = async (req, res) => {
         const data = await pdf(buffer);
 
         const analysis = await analyzeResume(data.text);
-
-        console.log(JSON.stringify(analysis, null, 2));
 
         // Save or update resume
         console.log("Saving to MongoDB...");
@@ -89,16 +85,6 @@ export const uploadResume = async (req, res) => {
         req.user.resume = resume._id;
         await req.user.save();
 
-        console.log(req.file);
-
-        console.log("Current Directory:", process.cwd());
-
-        console.log("Path:", req.file.path);
-
-        console.log("Exists:", fs.existsSync(req.file.path));
-
-        console.log("Files:", fs.readdirSync("uploads"));
-
         res.status(200).json({
             success: true,
             message: "Resume analyzed successfully.",
@@ -120,7 +106,6 @@ export const uploadResume = async (req, res) => {
 
     if (req.file) {
         try {
-            console.log("Deleting:", req.file.path);
             await fsPromises.unlink(req.file.path);
             console.log("Deleted successfully");
         } catch (err) {

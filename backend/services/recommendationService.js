@@ -256,14 +256,15 @@ const MIN_SKILL_SCORE =  Number(process.env.MIN_SKILL_SCORE) || 50;
 
 export const recommendJobs = async (resume, { page = 1, limit = 25 } = {}) => {
 
+    const canonicalResumeSkills = [
+        ...new Set(resume.skills.map(getCanonicalSkill)),
+    ];
+
     const jobs = await Job.find({
-
         status: "active",
-
         requiredSkills: {
-            $in: resume.skills,
+            $in: canonicalResumeSkills,
         },
-
     })
     .sort({
         postedDate: -1,
