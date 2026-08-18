@@ -11,12 +11,17 @@ import cors from "cors"
 import { startJobScraper } from "./cron/scrapeJobsCron.js";
 import { startCleanupCron } from "./cron/cleanupJobsCron.js";
 import fs from "fs";
+import {apiLimiter, authLimiter} from "./middleware/Ratelimiters.js"
+import helmet from "helmet";
 
 
 dotenv.config();
 
 const app = express();
 
+app.set("trust proxy", 1);
+
+app.use(helmet());
 app.use(express.json());
 app.use(cookieParser());
 
@@ -35,8 +40,10 @@ if (!fs.existsSync("uploads")) {
     console.log("Uploads folder created");
 }
 
+app.use("/api", apiLimiter);
+
 app.use("/api/user", userRoutes);
-app.use("/api/auth", authRoutes);
+app.use("/api/auth", authLimiter, authRoutes);
 app.use("/api/jobs", jobRoutes)
 app.use("/api/feedback", feedbackRoutes)
 app.use("/api/admin", adminRoutes)
