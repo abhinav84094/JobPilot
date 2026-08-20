@@ -43,7 +43,7 @@ if (!fs.existsSync("uploads")) {
 app.use("/api", apiLimiter);
 
 app.use("/api/user", userRoutes);
-app.use("/api/auth", authLimiter, authRoutes);
+app.use("/api/auth", authRoutes);
 app.use("/api/jobs", jobRoutes)
 app.use("/api/feedback", feedbackRoutes)
 app.use("/api/admin", adminRoutes)

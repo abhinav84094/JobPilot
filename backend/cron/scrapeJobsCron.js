@@ -4,7 +4,7 @@ import { scrapeLinkedInJobs } from "../services/scrapers/linkedInScraper.js";
 import { closeBrowser } from "../services/browser.js";
 
 const JOB_ROLES = [
-    "GenAI", "C#", "Java", "Python", "MERN", "JavaScript", 
+    "GenAI", "C#", "Java", "Python", "MERN", "JavaScript", "Php",
     "MS-Office", "recent", "Intern", 
     "Software Engineer Intern",
     "Frontend Intern",
@@ -36,23 +36,23 @@ const JOB_ROLES = [
 
 
 
-    // "Backend Developer",
+    "Backend Developer",
 
-    // "Frontend Developer",
+    "Frontend Developer",
 
-    // "Full Stack Developer",
+    "Full Stack Developer",
 
-    // "React Developer",
+    "React Developer",
 
-    // "Node.js Developer",
+    "Node.js Developer",
 
-    // "MERN Developer",
+    "MERN Developer",
 
-    // "Java Developer",
+    "Java Developer",
 
-    // "Python Developer",
+    "Python Developer",
 
-    // "Software Engineer",
+    "Software Engineer",
 
 ];
 
@@ -105,7 +105,7 @@ export const startJobScraper = () => {
     runScraper();
 
     // Every 100 Minutes
-    cron.schedule("*/100 * * * *", async () => {
+    cron.schedule("0 */2 * * *", async () => {
 
         await runScraper();
 

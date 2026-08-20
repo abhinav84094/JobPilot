@@ -7,9 +7,12 @@ import {
 
 import authMiddleware from "../middleware/authMiddleware.js";
 
+import {apiLimiter, authLimiter} from "../middleware/Ratelimiters.js"
+
+
 const router = express.Router();
 
-router.post("/google", googleLogin);
+router.post("/google", authLimiter, googleLogin);
 
 router.get("/me", authMiddleware, getCurrentUser);
 
